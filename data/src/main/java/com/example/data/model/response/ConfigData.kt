@@ -7,25 +7,27 @@ import com.google.gson.annotations.SerializedName
  * */
 data class ConfigData(
     @SerializedName("idx")
-    val idx: Int, // ok
+    val idx: Int,
+    @SerializedName("appMutex")
+    val appMutex: Boolean,
     @SerializedName("adultCheck")
-    val adultCheck: AdultCheck, // ok
+    val adultCheck: AdultCheck,
     @SerializedName("banner")
-    val banner: Banner, // ok
+    val banner: Banner,
     @SerializedName("broadcast")
-    val broadcast: Boolean, // ok
+    val broadcast: Boolean,
     @SerializedName("categoryNew")
-    val categoryNew: List<CategoryNew>, // ok
+    val categoryNew: List<CategoryNew>,
     @SerializedName("chatMessage")
-    val chatMessage: ChatMessage, // ok
+    val chatMessage: ChatMessage,
     @SerializedName("debug")
     val debug: Debug,
     @SerializedName("ivsAutoMaxQuality")
-    val ivsAutoMaxQuality: Int, // ok
+    val ivsAutoMaxQuality: Int,
     @SerializedName("ivsStartQuality")
-    val ivsStartQuality: Int, // ok
+    val ivsStartQuality: Int,
     @SerializedName("link")
-    val link: Link, // ok
+    val link: Link,
     @SerializedName("message")
     val message: String,
     @SerializedName("newChat")
@@ -33,9 +35,9 @@ data class ConfigData(
     @SerializedName("result")
     val result: Boolean,
     @SerializedName("server")
-    val server: Server, // ok
+    val server: Server,
     @SerializedName("socialLogin")
-    val socialLogin: SocialLogin, // ok
+    val socialLogin: SocialLogin,
     @SerializedName("socialServiceUrl")
     val socialServiceUrl: SocialServiceUrl,
     @SerializedName("update")

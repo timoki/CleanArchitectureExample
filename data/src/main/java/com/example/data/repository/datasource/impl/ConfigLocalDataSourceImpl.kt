@@ -3,7 +3,6 @@ package com.example.data.repository.datasource.impl
 import com.example.data.db.dao.ConfigDataDao
 import com.example.data.db.entity.config.ConfigDataEntity
 import com.example.data.repository.datasource.ConfigLocalDataSource
-import kotlinx.coroutines.flow.Flow
 
 /**
  * ConfigLocalDataSource Interface 를 구현하는 클래스이다.

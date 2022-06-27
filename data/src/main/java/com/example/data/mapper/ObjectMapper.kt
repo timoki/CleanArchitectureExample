@@ -12,122 +12,221 @@ object ObjectMapper {
 
     fun ConfigDataEntity.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
         message = this.message,
-        result = this.result
+        result = this.result,
+        idx = this.idx,
+        appMutex = this.appMutex,
+        broadcast = this.broadcast,
+        ivsAutoMaxQuality = this.ivsAutoMaxQuality,
+        ivsStartQuality = this.ivsStartQuality,
+        userIp = this.userIp,
+        adultCheck = this.adultCheck.toModel(),
+        categoryNew = this.categoryNew.toCategoryNewModelListFromEntity(),
+        banner = this.banner.toModel()
     )
 
     fun ConfigData.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
         message = this.message,
-        result = this.result
+        result = this.result,
+        idx = this.idx,
+        appMutex = this.appMutex,
+        broadcast = this.broadcast,
+        ivsAutoMaxQuality = this.ivsAutoMaxQuality,
+        ivsStartQuality = this.ivsStartQuality,
+        userIp = this.userIp,
+        adultCheck = this.adultCheck.toModel(),
+        categoryNew = this.categoryNew.toCategoryNewModelList(),
+        banner = this.banner.toModel()
     )
 
     fun ConfigData.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
         id = 1,
         message = this.message,
-        result = this.result
+        result = this.result,
+        idx = this.idx,
+        appMutex = this.appMutex,
+        broadcast = this.broadcast,
+        ivsAutoMaxQuality = this.ivsAutoMaxQuality,
+        ivsStartQuality = this.ivsStartQuality,
+        userIp = this.userIp,
+        adultCheck = this.adultCheck.toEntity(),
+        categoryNew = this.categoryNew.toCategoryNewEntityList(),
+        banner = this.banner.toEntity()
     )
 
     fun ConfigDataModel.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
         id = 1,
         message = this.message,
-        result = this.result
+        result = this.result,
+        idx = this.idx,
+        appMutex = this.appMutex,
+        broadcast = this.broadcast,
+        ivsAutoMaxQuality = this.ivsAutoMaxQuality,
+        ivsStartQuality = this.ivsStartQuality,
+        userIp = this.userIp,
+        adultCheck = this.adultCheck.toEntity(),
+        categoryNew = this.categoryNew.toCategoryNewEntityListFromModel(),
+        banner = this.banner.toEntity()
     )
 
-    fun ConfigDataModel.toConfigData(): ConfigData = ConfigData(
-        message = this.message,
-        result = this.result, idx = 0, adultCheck = AdultCheck(
-            chatMessage = false,
-            post = false,
-            recom = false
-        ), banner = Banner(
-            android = Android(main = listOf()),
-            win = Win(
-                main = listOf(),
-                newMain = listOf(),
-                subLeft = SubLeftAndRight(img = "", link = ""),
-                subRight = SubLeftAndRight(img = "", link = "")
-            )
-        ), broadcast = false, categoryNew = listOf(), chatMessage = ChatMessage(intro = ""), debug = Debug(
-            REQUEST_URI = "",
-            device = Device(token = "", type = "", version = ""),
-            name = "",
-            query = "",
-            queryCnt = 0,
-            queryErrorLib = listOf(),
-            queryLib = listOf(),
-            redis = listOf(),
-            xhprofLink = ""
-        ), ivsAutoMaxQuality = 0, ivsStartQuality = 0, link = Link(
-            adultAuth = "",
-            base = "",
-            channel = "",
-            chargeFull = "",
-            chargeHeart = "",
-            chargeItem = "",
-            chargeItemInfo = "",
-            chargeItemInfoListUp = "",
-            chargeItemInfoUserUp = "",
-            chargeItemInfoSaveUp = "",
-            chargeItemInfoFireRecom = "",
-            chargeItemInfoPushFan = "",
-            chargeItemInfoPushBookMark = "",
-            chargeItemInfoHeartEmo = "",
-            chargeItemInfoListDeco = "",
-            chargeItemInfoWorldMsg = "",
-            chargeItemInfoGuestLive = "",
-            chargeItemInfoEntUnlimit = "",
-            chargeItemInfoNickDeco = "",
-            chargeItemInfoIntroEffect = "",
-            event = "",
-            exchange = "",
-            findId = "",
-            findPw = "",
-            freeLawConsult = "",
-            itemLog = "",
-            join = "",
-            notice = "",
-            policyMarketing = "",
-            policyPrivacy = "",
-            policyService = "",
-            post = "",
-            reportCenter = "",
-            signatureGuide = "",
-            socialLoginFACEBOOK = "",
-            socialLoginGOOGLE = "",
-            socialLoginKAKAO = "",
-            socialLoginNAVER = ""
-        ), newChat = NewChat(
-            api = "",
-            node = "",
-            roomUserCount = "",
-            status = ""
-        ), server = Server(api = "", node = listOf()), socialLogin = SocialLogin(
-            FACEBOOK = false,
-            GOOGLE = false,
-            KAKAO = false,
-            NAVER = false
-        ), socialServiceUrl = SocialServiceUrl(
-            facebook = "",
-            instagram = "",
-            naverBlog = "",
-            naverTV = "",
-            tiktok = "",
-            twitter = "",
-            youtube = ""
-        ), update = listOf(), userIp = ""
-    )
-
-    fun AdultCheckEntity.toAdutCheckModel() = AdultCheckModel(
+    // AdultCheck 시작
+    private fun AdultCheckEntity.toModel() = AdultCheckModel(
         chatMessage = this.chatMessage,
         post = this.post,
         recom = this.recom
     )
 
-    // List 를 -> List로 바꾸는 것
-    fun List<CategoryNewEntity>.toCategoryNewModelList(): List<CategoryNewModel> = map {
-        it.toCategoryNewModel()
+    private fun AdultCheckModel.toEntity() = AdultCheckEntity(
+        chatMessage = this.chatMessage,
+        post = this.post,
+        recom = this.recom
+    )
+
+    private fun AdultCheck.toEntity() = AdultCheckEntity(
+        chatMessage = this.chatMessage,
+        post = this.post,
+        recom = this.recom
+    )
+
+    private fun AdultCheck.toModel() = AdultCheckModel(
+        chatMessage = this.chatMessage,
+        post = this.post,
+        recom = this.recom
+    )
+    // AdultCheck 끝
+
+    // Banner 시작
+    // BannerEntity -> BannerModel
+    private fun BannerEntity.toModel() = BannerModel(
+        android = this.android.toModel(),
+        win = this.win.toModel()
+    )
+
+    private fun AndroidEntity.toModel() = AndroidModel(
+        main = this.main.toMainModelListFromEntity()
+    )
+
+    private fun WinEntity.toModel() = WinModel(
+        main = this.main.toMainModelListFromEntity(),
+        newMain = this.newMain.toMainModelListFromEntity(),
+        subLeft = this.subLeft.toModel(),
+        subRight = this.subRight.toModel()
+    )
+
+    private fun List<MainEntity>.toMainModelListFromEntity(): List<MainModel> = map {
+        it.toModel()
     }
 
-    fun CategoryNewEntity.toCategoryNewModel(): CategoryNewModel = CategoryNewModel(
+    private fun MainEntity.toModel(): MainModel = MainModel(
+        img = this.img,
+        url = this.url
+    )
+
+    private fun SubLeftAndRightEntity.toModel(): SubLeftAndRightModel = SubLeftAndRightModel(
+        img = this.img,
+        link = this.link
+    )
+
+    // BannerModel -> BannerEntity
+    private fun BannerModel.toEntity() = BannerEntity(
+        android = this.android.toEntity(),
+        win = this.win.toEntity()
+    )
+
+    private fun AndroidModel.toEntity() = AndroidEntity(
+        main = this.main.toEntityListFromModel()
+    )
+
+    private fun WinModel.toEntity() = WinEntity(
+        main = this.main.toEntityListFromModel(),
+        newMain = this.newMain.toEntityListFromModel(),
+        subLeft = this.subLeft.toEntity(),
+        subRight = this.subRight.toEntity()
+    )
+
+    private fun List<MainModel>.toEntityListFromModel(): List<MainEntity> = map {
+        it.toEntity()
+    }
+
+    private fun MainModel.toEntity(): MainEntity = MainEntity(
+        img = this.img,
+        url = this.url
+    )
+
+    private fun SubLeftAndRightModel.toEntity(): SubLeftAndRightEntity = SubLeftAndRightEntity(
+        img = this.img,
+        link = this.link
+    )
+
+    // Banner -> BannerEntity
+    private fun Banner.toEntity() = BannerEntity(
+        android = this.android.toEntity(),
+        win = this.win.toEntity()
+    )
+
+    private fun Android.toEntity() = AndroidEntity(
+        main = this.main.toEntityList()
+    )
+
+    private fun Win.toEntity() = WinEntity(
+        main = this.main.toEntityList(),
+        newMain = this.newMain.toEntityList(),
+        subLeft = this.subLeft.toEntity(),
+        subRight = this.subRight.toEntity()
+    )
+
+    private fun List<Main>.toEntityList(): List<MainEntity> = map {
+        it.toEntity()
+    }
+
+    private fun Main.toEntity(): MainEntity = MainEntity(
+        img = this.img,
+        url = this.url
+    )
+
+    private fun SubLeftAndRight.toEntity(): SubLeftAndRightEntity = SubLeftAndRightEntity(
+        img = this.img,
+        link = this.link
+    )
+
+    // Banner -> BannerModel
+    private fun Banner.toModel() = BannerModel(
+        android = this.android.toModel(),
+        win = this.win.toModel()
+    )
+
+    private fun Android.toModel() = AndroidModel(
+        main = this.main.toMainModelList()
+    )
+
+    private fun Win.toModel() = WinModel(
+        main = this.main.toMainModelList(),
+        newMain = this.newMain.toMainModelList(),
+        subLeft = this.subLeft.toModel(),
+        subRight = this.subRight.toModel()
+    )
+
+    private fun List<Main>.toMainModelList(): List<MainModel> = map {
+        it.toModel()
+    }
+
+    private fun Main.toModel(): MainModel = MainModel(
+        img = this.img,
+        url = this.url
+    )
+
+    private fun SubLeftAndRight.toModel(): SubLeftAndRightModel = SubLeftAndRightModel(
+        img = this.img,
+        link = this.link
+    )
+    // Banner 끝
+
+    // CategoryNew 시작
+    private fun List<CategoryNewEntity>.toCategoryNewModelListFromEntity(): List<CategoryNewModel> =
+        map {
+            it.toModel()
+        }
+
+    private fun CategoryNewEntity.toModel(): CategoryNewModel = CategoryNewModel(
         code = this.code,
         idx = this.idx,
         isList = this.isList,
@@ -135,4 +234,45 @@ object ObjectMapper {
         title = this.title,
         type = this.type
     )
+
+    private fun List<CategoryNewModel>.toCategoryNewEntityListFromModel(): List<CategoryNewEntity> =
+        map {
+            it.toEntity()
+        }
+
+    private fun CategoryNewModel.toEntity(): CategoryNewEntity = CategoryNewEntity(
+        code = this.code,
+        idx = this.idx,
+        isList = this.isList,
+        isView = this.isView,
+        title = this.title,
+        type = this.type
+    )
+
+    private fun List<CategoryNew>.toCategoryNewModelList(): List<CategoryNewModel> = map {
+        it.toModel()
+    }
+
+    private fun CategoryNew.toModel(): CategoryNewModel = CategoryNewModel(
+        code = this.code,
+        idx = this.idx,
+        isList = this.isList,
+        isView = this.isView,
+        title = this.title,
+        type = this.type
+    )
+
+    private fun List<CategoryNew>.toCategoryNewEntityList(): List<CategoryNewEntity> = map {
+        it.toEntity()
+    }
+
+    private fun CategoryNew.toEntity(): CategoryNewEntity = CategoryNewEntity(
+        code = this.code,
+        idx = this.idx,
+        isList = this.isList,
+        isView = this.isView,
+        title = this.title,
+        type = this.type
+    )
+    // CategoryNew 끝
 }

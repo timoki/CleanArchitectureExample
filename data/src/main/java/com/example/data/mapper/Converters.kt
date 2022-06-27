@@ -1,6 +1,8 @@
 package com.example.data.mapper
 
 import androidx.room.TypeConverter
+import com.example.data.db.entity.config.BannerEntity
+import com.example.data.db.entity.config.CategoryNewEntity
 import com.example.data.db.entity.config.MainEntity
 import com.example.domain.model.config.MainModel
 import com.google.gson.Gson
@@ -12,20 +14,32 @@ import com.google.gson.Gson
  * */
 class Converters {
     @TypeConverter
-    fun stringListToJson(value: List<String>?) = Gson().toJson(value)
+    fun stringListToJson(value: List<String>?) : String = Gson().toJson(value)
 
     @TypeConverter
     fun stringJsonToList(value: String) = Gson().fromJson(value, Array<String>::class.java).toList()
 
     @TypeConverter
-    fun anyListToJson(value: List<Any>?) = Gson().toJson(value)
+    fun anyListToJson(value: List<Any>?) : String = Gson().toJson(value)
 
     @TypeConverter
     fun anyJsonToList(value: String) = Gson().fromJson(value, Array<Any>::class.java).toList()
 
     @TypeConverter
-    fun bannerAndroidMainListToJson(value: List<MainEntity>?) = Gson().toJson(value)
+    fun bannerAndroidMainListToJson(value: List<MainEntity>?) : String = Gson().toJson(value)
 
     @TypeConverter
     fun bannerAndroidMainJsonToList(value: String) = Gson().fromJson(value, Array<MainModel>::class.java).toList()
+
+    @TypeConverter
+    fun categoryNewListToJson(value: List<CategoryNewEntity>) : String = Gson().toJson(value)
+
+    @TypeConverter
+    fun categoryNewJsonToList(value: String) : List<CategoryNewEntity> = Gson().fromJson(value, Array<CategoryNewEntity>::class.java).toList()
+
+    @TypeConverter
+    fun bannerToJson(value: BannerEntity) : String = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonToBanner(value: String) : BannerEntity = Gson().fromJson(value, BannerEntity::class.java)
 }

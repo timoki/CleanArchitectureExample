@@ -8,7 +8,10 @@ import com.example.domain.model.base.Result
 import com.example.domain.model.config.ConfigDataModel
 import com.example.domain.repository.ConfigRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class ConfigRepositoryImpl(
     private val remoteDataSource: ConfigRemoteDataSource,
@@ -53,5 +56,9 @@ class ConfigRepositoryImpl(
 
     override suspend fun deleteConfigDataLocal(configData: ConfigDataModel) {
         return localDataSource.deleteConfigLocal(configData.toConfigDataEntity())
+    }
+
+    companion object {
+        private const val TAG = "ConfigRepositoryImpl"
     }
 }

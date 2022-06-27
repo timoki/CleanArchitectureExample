@@ -35,7 +35,7 @@ class MainViewModel @Inject constructor(
     private fun requestGetConfig() = getConfigUseCase.invoke()
         .stateIn( // Flow 를 StateFlow 로 변환하는 작업
             scope = viewModelScope, //CoroutineScope 명시
-            started = SharingStarted.WhileSubscribed(5000), //Flow 로부터 언제부터 구독을 할지 명시(SharingStarted : Collector 가 등록되면 바로 시작, WhileSubscribed : Collector 가 없어지면 5초 후 중지)
+            started = SharingStarted.WhileSubscribed(5_000), //Flow 로부터 언제부터 구독을 할지 명시(SharingStarted : Collector 가 등록되면 바로 시작, WhileSubscribed : Collector 가 없어지면 5초 후 중지)
             initialValue = Result.Loading()
         )
 
@@ -51,7 +51,6 @@ class MainViewModel @Inject constructor(
                     if (type.data?.result == true) {
                         Log.d(TAG, "${type.data}")
                         _configDataModel.value = type.data
-                        return@collectLatest
                     }
                 }
 

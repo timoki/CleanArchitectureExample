@@ -5,7 +5,5 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 data class AndroidEntity (
-    @PrimaryKey
-    val id: Long,
     val main: List<MainEntity>
 )
