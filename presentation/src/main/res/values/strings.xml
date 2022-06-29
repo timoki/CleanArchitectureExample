@@ -1,4 +1,32 @@
 <resources>
     <string name="app_name">아키텍쳐 테스트</string>
     <string name="action_send">전송</string>
+
+    <string name="logout">로그아웃</string>
+
+    <!-- 로그인 팝업 -->
+    <string name="login">로그인</string>
+    <string name="join">회원가입</string>
+    <string name="sns_login">SNS계정으로 간편로그인</string>
+    <string name="panda_login">팬더티비 로그인</string>
+    <string name="id">아이디</string>
+    <string name="pw">비밀번호</string>
+    <string name="save_id">아이디 저장</string>
+    <string name="auto_login">자동 로그인</string>
+    <string name="find_id">아이디 찾기</string>
+    <string name="find_pw">비밀번호 찾기</string>
+
+    <!-- 회원가입 팝업 -->
+    <string name="sns_join">SNS계정으로 간편가입</string>
+    <string name="panda_join">팬더티비 회원가입</string>
+    <string name="pw_re">비밀번호 확인</string>
+    <string name="nickname">닉네임</string>
+    <string name="id_check">6~15자 이내의 문자/숫자</string>
+    <string name="pw_check">8~15자 이내의 대,소문자,특수문자!@#$%^&amp;*</string>
+    <string name="nick_check">2~12자 이내의 문자/숫자</string>
+    <string name="all_agree">전체동의</string>
+    <string name="agree1">[필수] 서비스 이용약관 동의</string>
+    <string name="agree2">[필수] 개인정보 처리방침 동의</string>
+    <string name="agree3">[필수] 만 14세 이상입니다.</string>
+    <string name="agree4">[선택] 무료하트 및 하트 이벤트 정보 알림에 동의</string>
 </resources>

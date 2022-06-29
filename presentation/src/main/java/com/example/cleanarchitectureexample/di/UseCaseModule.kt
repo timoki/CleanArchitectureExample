@@ -1,9 +1,11 @@
 package com.example.cleanarchitectureexample.di
 
 import com.example.domain.repository.ConfigRepository
+import com.example.domain.repository.MemberRepository
 import com.example.domain.usecase.config.DeleteConfigLocalUseCase
 import com.example.domain.usecase.config.GetConfigUseCase
 import com.example.domain.usecase.config.InsertConfigLocalUseCase
+import com.example.domain.usecase.member.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,4 +38,34 @@ object UseCaseModule {
     fun provideDeleteConfigLocalUseCase(
         configRepository: ConfigRepository
     ): DeleteConfigLocalUseCase = DeleteConfigLocalUseCase(configRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestMemberCheckIdUseCase(
+        memberRepository: MemberRepository
+    ): RequestMemberCheckIdUseCase = RequestMemberCheckIdUseCase(memberRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestMemberCheckNickUseCase(
+        memberRepository: MemberRepository
+    ): RequestMemberCheckNickUseCase = RequestMemberCheckNickUseCase(memberRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestMemberLoginUseCase(
+        memberRepository: MemberRepository
+    ): RequestMemberLoginUseCase = RequestMemberLoginUseCase(memberRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestMemberJoinUseCase(
+        memberRepository: MemberRepository
+    ): RequestMemberJoinUseCase = RequestMemberJoinUseCase(memberRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestMemberLogoutUseCase(
+        memberRepository: MemberRepository
+    ): RequestMemberLogoutUseCase = RequestMemberLogoutUseCase(memberRepository)
 }

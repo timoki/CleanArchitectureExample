@@ -1,8 +1,8 @@
 package com.example.cleanarchitectureexample.di
 
-import com.example.data.api.ConfigService
-import com.example.data.repository.datasource.ConfigRemoteDataSource
-import com.example.data.repository.datasource.impl.ConfigRemoteDataSourceImpl
+import com.example.data.api.ApiService
+import com.example.data.repository.datasource.RemoteDataSource
+import com.example.data.repository.datasource.impl.RemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 object RemoteDataSourceModule {
     @Singleton
     @Provides
-    fun provideConfigRemoteDataSource(
-        service: ConfigService
-    ) : ConfigRemoteDataSource = ConfigRemoteDataSourceImpl(service)
+    fun provideRemoteDataSource(
+        service: ApiService
+    ) : RemoteDataSource = RemoteDataSourceImpl(service)
 }

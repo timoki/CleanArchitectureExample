@@ -1,7 +1,7 @@
 package com.example.cleanarchitectureexample.di
 
 import androidx.viewbinding.BuildConfig
-import com.example.data.api.ConfigService
+import com.example.data.api.ApiService
 import com.example.domain.model.base.Constants
 import dagger.Module
 import dagger.Provides
@@ -39,10 +39,9 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideConfigService(
+    fun provideApiService(
         retrofit: Retrofit
-    ) : ConfigService = retrofit.create(ConfigService::class.java)
-
+    ) : ApiService = retrofit.create(ApiService::class.java)
 
     @Singleton
     @Provides

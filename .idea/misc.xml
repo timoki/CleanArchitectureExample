@@ -3,7 +3,26 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/activity_main.xml" value="0.2692502532928065" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/border_line_grey_radius_5.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/btn_default.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/edittext_cursor.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/fill_disable_radius_top_14.xml" value="0.441" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/fill_tranfer_radius_14.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/fill_transfer_radius_14.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/fill_white_radius_bottom_14.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/fill_white_radius_top_14.xml" value="0.441" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sample_icon.xml" value="0.158" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/selector_checkbox.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sign_dialog_join_tab_background.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sign_dialog_login_tab_background.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sign_dialog_tab_background.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sign_dialog_tab_item_select.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/drawable/sign_dialog_tab_item_unselect.xml" value="0.248" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/activity_main.xml" value="0.5" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/dialog_join_tab.xml" value="0.67" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/dialog_login.xml" value="0.5625" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/dialog_login_tab.xml" value="0.7286821705426356" />
+        <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/dialog_sign.xml" value="0.5" />
         <entry key="..\:/Android/CleanArchitectureExample/presentation/src/main/res/layout/fragment_blank.xml" value="0.5536458333333333" />
       </map>
     </option>

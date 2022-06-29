@@ -3,6 +3,9 @@ package com.example.cleanarchitectureexample
 import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -13,7 +16,6 @@ class CleanApplication : Application() {
 
     override fun onTerminate() {
         super.onTerminate()
-        instance = null
     }
 
     override fun onTrimMemory(level: Int) {
@@ -23,16 +25,8 @@ class CleanApplication : Application() {
         }
     }
 
-    companion object {
-        private var instance: CleanApplication? = null
-        lateinit var appContext: Context
-        val globalApplicationContext: CleanApplication
-            get() {
-                if (instance == null) {
-                    throw IllegalStateException("This Application does not inherit GlobalApplication")
-                }
+    override fun onCreate() {
+        super.onCreate()
 
-                return instance as CleanApplication
-            }
     }
 }

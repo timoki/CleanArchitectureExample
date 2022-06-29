@@ -1,8 +1,14 @@
 package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
-import com.example.data.model.response.*
+import com.example.data.model.config.*
+import com.example.data.model.defaultData.DefaultData
+import com.example.data.model.defaultData.ErrorData
+import com.example.data.model.login.LoginData
 import com.example.domain.model.config.*
+import com.example.domain.model.defaultData.DefaultDataModel
+import com.example.domain.model.defaultData.ErrorDataModel
+import com.example.domain.model.login.LoginDataModel
 
 /**
  * Local DB DataClass, Remote DataClass, UI DataClass 3개의 타입을 서로 변환하기 위한 Mapper Class
@@ -10,6 +16,9 @@ import com.example.domain.model.config.*
  * */
 object ObjectMapper {
 
+    /**
+     * Config 시작
+     * */
     fun ConfigDataEntity.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
         message = this.message,
         result = this.result,
@@ -275,4 +284,57 @@ object ObjectMapper {
         type = this.type
     )
     // CategoryNew 끝
+
+    /**
+     * Config 끝
+     * */
+
+    /**
+     * Member 시작
+     * */
+    fun DefaultDataModel.toDefaultData(): DefaultData = DefaultData(
+        result = this.result,
+        message = this.message,
+        errorData = this.errorData.toErrorData()
+    )
+
+    private fun ErrorDataModel.toErrorData(): ErrorData = ErrorData(
+        code = this.code
+    )
+
+    fun DefaultData.toDefaultDataModel(): DefaultDataModel = DefaultDataModel(
+        result = this.result,
+        message = this.message,
+        errorData = this.errorData.toErrorDataModel()
+    )
+
+    private fun ErrorData.toErrorDataModel(): ErrorDataModel = ErrorDataModel(
+        code = this.code
+    )
+
+    fun LoginDataModel.toLoginData(): LoginData = LoginData(
+        result = this.result,
+        userInfo = this.userInfo,
+        loginInfo = this.loginInfo,
+        media = this.media,
+        alert = this.alert,
+        needPwChange = this.needPwChange,
+        message = this.message,
+        errorData = this.errorData.toErrorData()
+    )
+
+    fun LoginData.toLoginDataModel(): LoginDataModel = LoginDataModel(
+        result = this.result,
+        userInfo = this.userInfo,
+        loginInfo = this.loginInfo,
+        media = this.media,
+        alert = this.alert,
+        needPwChange = this.needPwChange,
+        message = this.message,
+        errorData = this.errorData.toErrorDataModel()
+    )
+
+    /**
+     * User 끝
+     * */
 }

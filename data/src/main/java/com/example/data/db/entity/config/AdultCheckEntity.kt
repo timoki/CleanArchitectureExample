@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 
 data class AdultCheckEntity(
     @ColumnInfo(name = "chatMessage")
-    val chatMessage: Boolean,
+    val chatMessage: Boolean?,
     @ColumnInfo(name = "post")
     val post: Boolean,
     @ColumnInfo(name = "recom")

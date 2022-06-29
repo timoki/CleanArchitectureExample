@@ -16,7 +16,7 @@ import com.example.data.mapper.Converters
     entities = [
         ConfigDataEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
