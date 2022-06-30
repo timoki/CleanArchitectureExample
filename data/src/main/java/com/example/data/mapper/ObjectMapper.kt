@@ -1,14 +1,17 @@
 package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
+import com.example.data.mapper.ObjectMapper.toDeviceInfo
+import com.example.data.mapper.ObjectMapper.toSiteMode
+import com.example.data.mapper.ObjectMapper.toUserInfo
 import com.example.data.model.config.*
 import com.example.data.model.defaultData.DefaultData
 import com.example.data.model.defaultData.ErrorData
-import com.example.data.model.login.LoginData
+import com.example.data.model.login.*
 import com.example.domain.model.config.*
 import com.example.domain.model.defaultData.DefaultDataModel
 import com.example.domain.model.defaultData.ErrorDataModel
-import com.example.domain.model.login.LoginDataModel
+import com.example.domain.model.login.*
 
 /**
  * Local DB DataClass, Remote DataClass, UI DataClass 3개의 타입을 서로 변환하기 위한 Mapper Class
@@ -295,7 +298,7 @@ object ObjectMapper {
     fun DefaultDataModel.toDefaultData(): DefaultData = DefaultData(
         result = this.result,
         message = this.message,
-        errorData = this.errorData.toErrorData()
+        errorData = this.errorData?.toErrorData()
     )
 
     private fun ErrorDataModel.toErrorData(): ErrorData = ErrorData(
@@ -305,7 +308,7 @@ object ObjectMapper {
     fun DefaultData.toDefaultDataModel(): DefaultDataModel = DefaultDataModel(
         result = this.result,
         message = this.message,
-        errorData = this.errorData.toErrorDataModel()
+        errorData = this.errorData?.toErrorDataModel()
     )
 
     private fun ErrorData.toErrorDataModel(): ErrorDataModel = ErrorDataModel(
@@ -314,24 +317,104 @@ object ObjectMapper {
 
     fun LoginDataModel.toLoginData(): LoginData = LoginData(
         result = this.result,
-        userInfo = this.userInfo,
-        loginInfo = this.loginInfo,
-        media = this.media,
-        alert = this.alert,
+        loginInfo = this.loginInfo?.toLoginInfo(),
         needPwChange = this.needPwChange,
         message = this.message,
-        errorData = this.errorData.toErrorData()
+        errorData = this.errorData?.toErrorData(),
+        userIp = this.userIp
     )
 
     fun LoginData.toLoginDataModel(): LoginDataModel = LoginDataModel(
         result = this.result,
-        userInfo = this.userInfo,
-        loginInfo = this.loginInfo,
-        media = this.media,
-        alert = this.alert,
+        loginInfo = this.loginInfo?.toLoginInfoModel(),
         needPwChange = this.needPwChange,
         message = this.message,
-        errorData = this.errorData.toErrorDataModel()
+        errorData = this.errorData?.toErrorDataModel(),
+        userIp = this.userIp
+    )
+
+    private fun LoginInfoModel.toLoginInfo(): LoginInfo = LoginInfo(
+        deviceInfo = this.deviceInfo?.toDeviceInfo(),
+        sessionKey = this.sessionKey,
+        siteMode = this.siteMode?.toSiteMode(),
+        userInfo = this.userInfo?.toUserInfo()
+    )
+
+    private fun LoginInfo.toLoginInfoModel(): LoginInfoModel = LoginInfoModel(
+        deviceInfo = this.deviceInfo?.toDeviceInfoModel(),
+        sessionKey = this.sessionKey,
+        siteMode = this.siteMode?.toSiteModeModel(),
+        userInfo = this.userInfo?.toUserInfoModel()
+    )
+
+    private fun DeviceInfoModel.toDeviceInfo(): DeviceInfo = DeviceInfo(
+        type = this.type,
+        version = this.version
+    )
+
+    private fun DeviceInfo.toDeviceInfoModel(): DeviceInfoModel = DeviceInfoModel(
+        type = this.type,
+        version = this.version
+    )
+
+    private fun SiteModeModel.toSiteMode(): SiteMode = SiteMode(
+        mode = this.mode,
+        needAuth = this.needAuth,
+        type = this.type
+    )
+
+    private fun SiteMode.toSiteModeModel(): SiteModeModel = SiteModeModel(
+        mode = this.mode,
+        needAuth = this.needAuth,
+        type = this.type
+    )
+
+    private fun UserInfoModel.toUserInfo(): UserInfo = UserInfo(
+        agreeSmsYN = this.agreeSmsYN,
+        authYN = this.authYN,
+        bjRank = this.bjRank,
+        channelDesc = this.channelDesc,
+        channelTitle = this.channelTitle,
+        chatYN = this.chatYN,
+        coinHave = this.coinHave,
+        coinUse = this.coinUse,
+        id = this.id,
+        idx = this.idx,
+        imgProfile = this.imgProfile,
+        imgProfileYN = this.imgProfileYN,
+        isAdult = this.isAdult,
+        isBJ = this.isBJ,
+        isLogin = this.isLogin,
+        nick = this.nick,
+        postCountReadN = this.postCountReadN,
+        postYN = this.postYN,
+        purchaseUser = this.purchaseUser,
+        recomYN = this.recomYN,
+        socialYN = this.socialYN
+    )
+
+    private fun UserInfo.toUserInfoModel(): UserInfoModel = UserInfoModel(
+        agreeSmsYN = this.agreeSmsYN,
+        authYN = this.authYN,
+        bjRank = this.bjRank,
+        channelDesc = this.channelDesc,
+        channelTitle = this.channelTitle,
+        chatYN = this.chatYN,
+        coinHave = this.coinHave,
+        coinUse = this.coinUse,
+        id = this.id,
+        idx = this.idx,
+        imgProfile = this.imgProfile,
+        imgProfileYN = this.imgProfileYN,
+        isAdult = this.isAdult,
+        isBJ = this.isBJ,
+        isLogin = this.isLogin,
+        nick = this.nick,
+        postCountReadN = this.postCountReadN,
+        postYN = this.postYN,
+        purchaseUser = this.purchaseUser,
+        recomYN = this.recomYN,
+        socialYN = this.socialYN
     )
 
     /**

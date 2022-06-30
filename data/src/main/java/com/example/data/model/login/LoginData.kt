@@ -4,20 +4,16 @@ import com.example.data.model.defaultData.ErrorData
 import com.google.gson.annotations.SerializedName
 
 data class LoginData(
-    @SerializedName("result")
-    val result: Boolean,
-    @SerializedName("userInfo")
-    val userInfo: List<Any>,
     @SerializedName("loginInfo")
-    val loginInfo: List<Any>,
-    @SerializedName("media")
-    val media: List<Any>,
-    @SerializedName("alert")
-    val alert: List<Any>,
-    @SerializedName("needPwChange")
-    val needPwChange: Boolean,
+    val loginInfo: LoginInfo?,
     @SerializedName("message")
     val message: String,
+    @SerializedName("needPwChange")
+    val needPwChange: Boolean?,
+    @SerializedName("result")
+    val result: Boolean,
+    @SerializedName("userIp")
+    val userIp: String?,
     @SerializedName("errorData")
-    val errorData: ErrorData
+    val errorData: ErrorData?
 )

@@ -8,5 +8,5 @@ data class DefaultData(
     @SerializedName("message")
     val message: String,
     @SerializedName("errorData")
-    val errorData: ErrorData
+    val errorData: ErrorData?
 )

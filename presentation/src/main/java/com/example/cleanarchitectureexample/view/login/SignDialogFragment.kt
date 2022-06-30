@@ -13,11 +13,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.databinding.DialogSignBinding
-import com.example.cleanarchitectureexample.utils.DataStoreModule
+import com.example.cleanarchitectureexample.utils.observeInLifecycle
 import com.example.cleanarchitectureexample.view.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -53,33 +53,33 @@ class SignDialogFragment : DialogFragment() {
     }
 
     private fun initViewModelCallback() = with(viewModel) {
-        val a = ""
-        if (a.isNullOrEmpty())
         lifecycleScope.launch {
-            loginSuccess.collectLatest {
-                context?.let { context ->
-                    if (isAutoLoginChecked.value) { //자동 로그인 체크 시 아이디, 비번 저장함
-                        DataStoreModule(context)
-                            .saveAccountInfo(
-                                loginIdText.value,
-                                loginPwText.value
-                            )
-                        return@let
-                    }
-                    if (isIdSaveChecked.value) {
-                        DataStoreModule(context)
-                            .saveMemoryId(
-                                loginIdText.value
-                            )
-                    }
-                }
-                mainViewModel.isLogin.value = true
+            closeDialog.collectLatest {
                 dismiss()
             }
-
-            networkError.collectLatest {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            }
         }
+
+        loginSuccess.onEach {
+            mainViewModel.setLogin(it)
+            dismiss()
+        }.observeInLifecycle(this@SignDialogFragment)
+
+        joinSuccess.onEach {
+            Toast.makeText(
+                context,
+                resources.getString(R.string.join_success),
+                Toast.LENGTH_SHORT
+            ).show()
+        }.observeInLifecycle(this@SignDialogFragment)
+
+        networkError.onEach {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "NetworkError -> $it")
+        }.observeInLifecycle(this@SignDialogFragment)
+    }
+
+    companion object {
+        private const val TAG = "SignDialogFragment"
+        fun newInstance(): SignDialogFragment = SignDialogFragment()
     }
 }

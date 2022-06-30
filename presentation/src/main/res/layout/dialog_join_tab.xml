@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="android.text.TextUtils"/>
+        <import type="com.example.cleanarchitectureexample.utils.JoinHelperTypes" />
 
         <variable
             name="signViewModel"
@@ -87,18 +87,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:hint="@string/id"
-                app:helperText="@string/id_check"
+                helperText="@{signViewModel.joinIdHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AppEditTextAppearance"
+                    textWatcher="@{signViewModel.joinIdTextWatcher}"
                     android:text="@={signViewModel.joinIdText}"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:imeOptions="actionNext"/>
-
+                    android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -106,13 +106,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/pw"
-                app:helperText="@string/pw_check"
+                helperText="@{signViewModel.joinPwHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AppEditTextAppearance"
+                    textWatcher="@{signViewModel.joinPwTextWatcher}"
                     android:text="@={signViewModel.joinPwText}"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -124,13 +125,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/pw_re"
-                app:helperText="@string/pw_re"
+                helperText="@{signViewModel.joinPwReHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AppEditTextAppearance"
+                    textWatcher="@{signViewModel.joinPwReTextWatcher}"
                     android:text="@={signViewModel.joinPwReText}"
                     android:inputType="textPassword"
                     android:maxLines="1"
@@ -142,13 +144,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/nickname"
-                app:helperText="@string/nick_check"
+                helperText="@{signViewModel.joinNickHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AppEditTextAppearance"
+                    textWatcher="@{signViewModel.joinNickTextWatcher}"
                     android:text="@={signViewModel.joinNickText}"
                     android:inputType="text"
                     android:maxLines="1"
@@ -332,7 +335,8 @@
                 android:background="@drawable/btn_default"
                 android:text="@string/join"
                 android:textColor="@color/white"
-                android:enabled="@{!TextUtils.isEmpty(signViewModel.joinIdText) &amp;&amp; !TextUtils.isEmpty(signViewModel.joinPwText) &amp;&amp; !TextUtils.isEmpty(signViewModel.joinPwReText) &amp;&amp; !TextUtils.isEmpty(signViewModel.joinNickText) ? true : false}"
+                android:enabled="@{signViewModel.isJoinButtonEnabled ? true : false}"
+                android:onClick="@{() -> signViewModel.joinButtonClick()}"
                 tools:enabled="false" />
 
         </LinearLayout>

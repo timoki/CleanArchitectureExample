@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:text="@string/login"
             android:onClick="@{() -> mainViewModel.loginClick()}"
-            android:visibility="@{mainViewModel.isLogin ? View.GONE : View.VISIBLE}"
+            android:visibility="@{mainViewModel.isLogin != null ? View.GONE : View.VISIBLE}"
             tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="@string/logout"
             android:onClick="@{() -> mainViewModel.logoutClick()}"
-            android:visibility="@{mainViewModel.isLogin ? View.VISIBLE : View.GONE}"
+            android:visibility="@{mainViewModel.isLogin != null ? View.VISIBLE : View.GONE}"
             tools:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent" />
 

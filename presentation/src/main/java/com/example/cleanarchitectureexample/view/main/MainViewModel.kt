@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.base.Result
 import com.example.domain.model.config.ConfigDataModel
+import com.example.domain.model.login.LoginDataModel
 import com.example.domain.usecase.config.DeleteConfigLocalUseCase
 import com.example.domain.usecase.config.GetConfigUseCase
 import com.example.domain.usecase.config.InsertConfigLocalUseCase
@@ -23,13 +24,13 @@ class MainViewModel @Inject constructor(
     private val logoutUseCase: RequestMemberLogoutUseCase
 ): ViewModel() {
 
-    private val _isLogin = MutableStateFlow(false)
-    val isLogin
-        get() = _isLogin
+    private val _isLogin = MutableStateFlow<LoginDataModel?>(null)
+    val isLogin: StateFlow<LoginDataModel?>
+        get() = _isLogin.asStateFlow()
 
     private val _configDataModel = MutableStateFlow<ConfigDataModel?>(null)
     val configDataModel: StateFlow<ConfigDataModel?>
-        get() = _configDataModel
+        get() = _configDataModel.asStateFlow()
 
     private val _networkError = Channel<String>(Channel.CONFLATED)
     val networkError = _networkError.receiveAsFlow()
@@ -103,7 +104,7 @@ class MainViewModel @Inject constructor(
                 is Result.Success -> {
                     _isShowProgress.value = false
                     if (type.data?.result == true) {
-                        _isLogin.value = false
+                        _isLogin.value = null
                     }
                 }
 
@@ -124,6 +125,10 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setLogin(loginData: LoginDataModel?) {
+        _isLogin.value = loginData
     }
 
     companion object {
