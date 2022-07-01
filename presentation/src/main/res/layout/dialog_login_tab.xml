@@ -85,7 +85,8 @@
                 style="@style/AppEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
+                helperText="@{signViewModel.loginIdHelperText}"
                 android:hint="@string/id">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -102,7 +103,8 @@
                 style="@style/AppEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="47dp"
+                android:layout_marginTop="46.5dp"
+                helperText="@{signViewModel.loginPwHelperText}"
                 android:hint="@string/pw">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -132,6 +134,7 @@
                     android:text="@string/save_id"
                     android:textColor="@color/black"
                     android:textSize="13sp"
+                    android:onClick="@{() -> signViewModel.onSaveIdClick()}"
                     tools:checked="false" />
 
                 <CheckBox
@@ -146,6 +149,7 @@
                     android:text="@string/auto_login"
                     android:textColor="@color/black"
                     android:textSize="13sp"
+                    android:onClick="@{() -> signViewModel.onAutoLoginClick()}"
                     tools:checked="false" />
             </LinearLayout>
 
@@ -166,11 +170,12 @@
                 android:layout_marginTop="16dp">
 
                 <TextView
+                    android:id="@+id/findId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/line"
                     android:fontFamily="@font/noto_sans_cjk_kr_demi_light"
-                    android:onClick="@{() -> signViewModel.findIdClick()}"
+                    android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
                     android:text="@string/find_id"
                     android:textColor="@color/text_dark_grey"
                     android:textSize="13sp" />
@@ -185,11 +190,12 @@
                     android:background="@color/line_small" />
 
                 <TextView
+                    android:id="@+id/findPw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/line"
                     android:fontFamily="@font/noto_sans_cjk_kr_demi_light"
-                    android:onClick="@{() -> signViewModel.findPwClick()}"
+                    android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
                     android:text="@string/find_pw"
                     android:textColor="@color/text_dark_grey"
                     android:textSize="13sp" />

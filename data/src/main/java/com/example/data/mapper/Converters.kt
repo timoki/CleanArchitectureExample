@@ -3,6 +3,7 @@ package com.example.data.mapper
 import androidx.room.TypeConverter
 import com.example.data.db.entity.config.BannerEntity
 import com.example.data.db.entity.config.CategoryNewEntity
+import com.example.data.db.entity.config.LinkEntity
 import com.example.data.db.entity.config.MainEntity
 import com.example.domain.model.config.MainModel
 import com.google.gson.Gson
@@ -42,4 +43,10 @@ class Converters {
 
     @TypeConverter
     fun jsonToBanner(value: String) : BannerEntity = Gson().fromJson(value, BannerEntity::class.java)
+
+    @TypeConverter
+    fun linkToJson(value: LinkEntity) : String = Gson().toJson(value)
+
+    @TypeConverter
+    fun jsonToLink(value: String) : LinkEntity = Gson().fromJson(value, LinkEntity::class.java)
 }

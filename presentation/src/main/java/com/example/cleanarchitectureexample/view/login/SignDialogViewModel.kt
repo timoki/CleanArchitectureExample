@@ -3,22 +3,25 @@ package com.example.cleanarchitectureexample.view.login
 import android.app.Application
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.view.View
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.utils.JoinHelperTypes
+import com.example.cleanarchitectureexample.utils.ResourceProvider
 import com.example.data.db.database.DataStoreModule
 import com.example.domain.model.base.Result
+import com.example.domain.model.config.ConfigDataModel
 import com.example.domain.model.login.LoginDataModel
 import com.example.domain.usecase.member.RequestMemberCheckIdUseCase
 import com.example.domain.usecase.member.RequestMemberCheckNickUseCase
 import com.example.domain.usecase.member.RequestMemberJoinUseCase
 import com.example.domain.usecase.member.RequestMemberLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,8 +31,11 @@ class SignDialogViewModel @Inject constructor(
     private val requestMemberCheckIdUseCase: RequestMemberCheckIdUseCase,
     private val requestMemberCheckNickUseCase: RequestMemberCheckNickUseCase,
     private val requestMemberLoginUseCase: RequestMemberLoginUseCase,
-    private val requestMemberJoinUseCase: RequestMemberJoinUseCase
+    private val requestMemberJoinUseCase: RequestMemberJoinUseCase,
+    private val resource: ResourceProvider
 ) : AndroidViewModel(application) {
+
+    val configApp = MutableStateFlow<ConfigDataModel?>(null)
 
     /** 기본 */
     //상단 X 아이콘 클릭
@@ -56,10 +62,20 @@ class SignDialogViewModel @Inject constructor(
     val loginSuccess = _loginSuccess.receiveAsFlow()
 
     //로그인 아이디 text
-    var loginIdText = MutableStateFlow("")
+    val loginIdText = MutableStateFlow("")
 
     //로그인 비밀번호 text
-    var loginPwText = MutableStateFlow("")
+    val loginPwText = MutableStateFlow("")
+
+    //로그인 아이디 헬퍼 텍스트
+    private val _loginIdHelperText = MutableStateFlow("")
+    val loginIdHelperText
+        get() = _loginIdHelperText.asStateFlow()
+
+    //로그인 비밀번호 헬퍼 텍스트
+    private val _loginPwHelperText = MutableStateFlow("")
+    val loginPwHelperText
+        get() = _loginPwHelperText.asStateFlow()
 
     //아이디 저장 체크
     private val _isIdSaveChecked = MutableStateFlow(false)
@@ -85,16 +101,16 @@ class SignDialogViewModel @Inject constructor(
     val joinSuccess = _joinSuccess.receiveAsFlow()
 
     //회원가입 아이디 text
-    var joinIdText = MutableStateFlow("")
+    val joinIdText = MutableStateFlow("")
 
     //회원가입 비밀번호 text
-    var joinPwText = MutableStateFlow("")
+    val joinPwText = MutableStateFlow("")
 
     //회원가입 비밀번호 확인 text
-    var joinPwReText = MutableStateFlow("")
+    val joinPwReText = MutableStateFlow("")
 
     //회원가입 닉네임 text
-    var joinNickText = MutableStateFlow("")
+    val joinNickText = MutableStateFlow("")
 
     //회원가입 아이디 헬퍼 텍스트
     private val _joinIdHelperText = MutableStateFlow(JoinHelperTypes.ID_NORMAL)
@@ -146,6 +162,9 @@ class SignDialogViewModel @Inject constructor(
     val isJoinButtonEnabled
         get() = _isJoinButtonEnabled.asStateFlow()
 
+    private val _actionWebView = Channel<View?>(Channel.CONFLATED)
+    val actionWebView = _actionWebView.receiveAsFlow()
+
     /** 기본 */
     //상단 X 아이콘 클릭
     fun closeButtonClick() = viewModelScope.launch {
@@ -162,33 +181,63 @@ class SignDialogViewModel @Inject constructor(
         _isSelectedToLoginTab.value = false
     }
 
+    init {
+        viewModelScope.launch {
+            loginIdText.value = dataStore.getSaveId().first()
+            _isIdSaveChecked.value = dataStore.isMemoryId().first()
+            _isAutoLoginChecked.value = dataStore.isAutoLogin().first()
+        }
+    }
+
     /** 로그인 */
     //로그인 버튼 클릭
     fun loginBtnClick() = viewModelScope.launch {
-        if (!loginIdText.value.isNullOrEmpty() && !loginPwText.value.isNullOrEmpty()) {
+        if (loginIdText.value.isNotEmpty() && loginPwText.value.isNotEmpty()) {
             requestLogin().collect { type ->
                 when (type) {
                     is Result.Loading -> {
-                        Log.d("아외안되", "Result.Loading")
                         _isShowProgress.value = true
                     }
 
                     is Result.Success -> {
                         _isShowProgress.value = false
-                        Log.d("아외안되", "Result.Success : ${type.data}")
+                        _loginIdHelperText.value = ""
+                        _loginPwHelperText.value = ""
+
                         if (type.data?.result == true) {
                             dataStore.apply {
-                                saveId(loginIdText.value)
-                                savePw(loginPwText.value)
-                                saveAutoLogin(isAutoLoginChecked.value)
-                                saveMemoryId(isIdSaveChecked.value)
+                                if (isIdSaveChecked.value) {
+                                    saveId(loginIdText.value)
+                                }
+
+                                if (isAutoLoginChecked.value) {
+                                    savePw(loginPwText.value)
+                                }
                             }
+
                             _loginSuccess.send(type.data)
+                            return@collect
+                        }
+
+                        _loginIdHelperText.value = ""
+                        _loginPwHelperText.value = ""
+
+                        when (type.data?.errorData?.code) {
+                            "noid", "wrongId" -> {
+                                _loginIdHelperText.value = type.data?.message ?: resource.getString(
+                                    R.string.warning_wrongId
+                                )
+                            }
+
+                            "nopw", "wrongPw" -> {
+                                _loginPwHelperText.value = type.data?.message ?: resource.getString(
+                                    R.string.warning_wrongPw
+                                )
+                            }
                         }
                     }
 
                     is Result.NetworkError -> {
-                        Log.d("아외안되", "Result.NetworkError -> ${type.message}")
                         _isShowProgress.value = false
                         type.message?.let {
                             _networkError.send(it)
@@ -196,7 +245,6 @@ class SignDialogViewModel @Inject constructor(
                     }
 
                     is Result.Error -> {
-                        Log.d("아외안되", "Result.Error -> ${type.message}")
                         _isShowProgress.value = false
                         type.message?.let {
                             _networkError.send(it)
@@ -217,14 +265,34 @@ class SignDialogViewModel @Inject constructor(
             )
 
 
-    //아이디 찾기 클릭
-    fun findIdClick() {
-
+    //웹뷰 이동
+    fun onSendWebView(view: View?) = viewModelScope.launch {
+        _actionWebView.send(view)
     }
 
-    //비밀번호 찾기 클릭
-    fun findPwClick() {
+    //아이디저장, 자동로그인 체크
+    fun checkAutoLogin() = viewModelScope.launch(Dispatchers.IO) {
+        dataStore.isAutoLogin().collect { b ->
+            if (b) {
+                dataStore.getSaveId().collect { id ->
+                    loginIdText.value = id
+                }
 
+                dataStore.getSavePw().collect { pw ->
+                    loginPwText.value = pw
+                }
+
+                loginBtnClick()
+            } else {
+                dataStore.isMemoryId().collect { bool ->
+                    if (bool) {
+                        dataStore.getSaveId().collect { id ->
+                            loginIdText.value = id
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /** 회원가입 */
@@ -337,7 +405,7 @@ class SignDialogViewModel @Inject constructor(
 
     //아이디 체크 결과
     private fun checkId(id: String) = viewModelScope.launch {
-        if (!id.isNullOrEmpty()) {
+        if (id.isNotEmpty()) {
             requestCheckId(id).collect { type ->
                 when (type) {
                     is Result.Loading -> {
@@ -428,12 +496,13 @@ class SignDialogViewModel @Inject constructor(
             } else {
                 _joinPwReHelperText.value = JoinHelperTypes.PW_RE_NORMAL
             }
+
             joinBtnEnabledCheck()
         }
     }
 
     //아이디 체크 처리
-    private fun requestcheckNick(nick: String) = requestMemberCheckNickUseCase(nick)
+    private fun requestCheckNick(nick: String) = requestMemberCheckNickUseCase(nick)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -442,8 +511,8 @@ class SignDialogViewModel @Inject constructor(
 
     //아이디 체크 결과
     private fun checkNick(nick: String) = viewModelScope.launch {
-        if (!nick.isNullOrEmpty()) {
-            requestcheckNick(nick).collect { type ->
+        if (nick.isNotEmpty()) {
+            requestCheckNick(nick).collect { type ->
                 when (type) {
                     is Result.Loading -> {
                         _isShowProgress.value = true
@@ -498,13 +567,13 @@ class SignDialogViewModel @Inject constructor(
     //회원가입 버튼 Enable 검사
     private fun joinBtnEnabledCheck() {
         _isJoinButtonEnabled.value =
-            !joinIdText.value.isNullOrEmpty() &&
+            joinIdText.value.isNotEmpty() &&
                     joinIdHelperText.value == JoinHelperTypes.ID_NORMAL &&
-                    !joinPwText.value.isNullOrEmpty() &&
+                    joinPwText.value.isNotEmpty() &&
                     joinPwHelperText.value == JoinHelperTypes.PW_NORMAL &&
-                    !joinPwReText.value.isNullOrEmpty() &&
+                    joinPwReText.value.isNotEmpty() &&
                     joinPwReHelperText.value == JoinHelperTypes.PW_RE_NORMAL &&
-                    !joinNickText.value.isNullOrEmpty() &&
+                    joinNickText.value.isNotEmpty() &&
                     joinNickHelperText.value == JoinHelperTypes.NICK_NORMAL &&
                     agree1.value &&
                     agree2.value &&
@@ -525,12 +594,11 @@ class SignDialogViewModel @Inject constructor(
                         if (it.result) {
                             _joinSuccess.send(Unit)
                             responseJoin()
+                            loginBtnClick()
                         } else {
                             _networkError.send(it.errorData?.code ?: "알수 없는 오류")
                         }
                     }
-
-                    joinBtnEnabledCheck()
                 }
 
                 is Result.NetworkError -> {
@@ -557,14 +625,13 @@ class SignDialogViewModel @Inject constructor(
         pw = joinPwText.value,
         pwRe = joinPwReText.value,
         agreeSmsYN = if (agree4.value) "Y" else "N"
+    ).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = Result.Loading()
     )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = Result.Loading()
-        )
 
-    //회원가입 완료 후 로그인 정보 세팅
+    //회원가입 완료 후 로그인 정보 세팅 -> 회원 가입 성공 시 자동 로그인 -> dismiss()
     private fun responseJoin() {
         loginIdText.value = joinIdText.value
         loginPwText.value = joinPwText.value
@@ -581,5 +648,21 @@ class SignDialogViewModel @Inject constructor(
         _isJoinButtonEnabled.value = false
 
         _isSelectedToLoginTab.value = true
+    }
+
+    fun onSaveIdClick() = viewModelScope.launch {
+        _isIdSaveChecked.value = !isIdSaveChecked.value
+        if (!isIdSaveChecked.value) {
+            dataStore.saveId("")
+        }
+
+        dataStore.saveMemoryId(isIdSaveChecked.value)
+    }
+
+    fun onAutoLoginClick() = viewModelScope.launch {
+        _isAutoLoginChecked.value = !isAutoLoginChecked.value
+        if (isAutoLoginChecked.value && !isIdSaveChecked.value) _isIdSaveChecked.value = true
+        dataStore.saveAutoLogin(isAutoLoginChecked.value)
+        dataStore.saveMemoryId(isIdSaveChecked.value)
     }
 }

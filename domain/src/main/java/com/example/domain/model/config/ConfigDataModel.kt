@@ -14,14 +14,14 @@ data class ConfigDataModel(
     val userIp: String,
     val adultCheck: AdultCheckModel,
     val categoryNew: List<CategoryNewModel>,
-    val banner: BannerModel
+    val banner: BannerModel,
+    val link: LinkModel
 
     /*,
     val broadcast: Boolean,
     val chatMessage: ChatMessageModel,
     val chatMessageReplace: ChatMessageReplaceModel,
     val debug: DebugModel,
-    val link: LinkModel,
     val newChat: NewChatModel,
     val server: ServerModel,
     val socialLogin: SocialLoginModel,

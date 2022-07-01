@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
@@ -25,128 +26,86 @@ class DataStoreModule(
     private val autoLoginKey = booleanPreferencesKey("autoLogin")
 
     suspend fun saveId(id: String?) = with(context.dataStore) {
-        data.catch { e ->
-            if (e is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw e
+        val saveId = getSaveId().first()
+        if (saveId != id) {
+            edit { edit ->
+                edit[saveIdKey] = id ?: ""
             }
         }
-            .map { pref ->
-                if (id != pref[saveIdKey]) {
-                    edit { edit ->
-                        edit[saveIdKey] = id ?: ""
-                    }
-                }
-            }
     }
 
     suspend fun savePw(pw: String?) = with(context.dataStore) {
-        data.catch { e ->
-            if (e is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw e
+        val savePw = getSavePw().first()
+        if (savePw != pw) {
+            edit { edit ->
+                edit[savePwKey] = pw ?: ""
             }
         }
-            .map { pref ->
-                if (pw != pref[saveIdKey]) {
-                    edit { edit ->
-                        edit[saveIdKey] = pw ?: ""
-                    }
-                }
-            }
     }
 
     suspend fun saveAutoLogin(b: Boolean) = with(context.dataStore) {
-        data.catch { e ->
-            if (e is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw e
+        val autoLogin = isAutoLogin().first()
+        if (autoLogin != b) {
+            edit { edit ->
+                edit[autoLoginKey] = b
             }
         }
-            .map { pref ->
-                if (pref[autoLoginKey] != b) {
-                    edit { edit ->
-                        edit[autoLoginKey] = b
-                    }
-                }
-            }
     }
 
     suspend fun saveMemoryId(b: Boolean) = with(context.dataStore) {
-        data.catch { e ->
-            if (e is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw e
+        val memoryId = isMemoryId().first()
+        if (memoryId != b) {
+            edit { edit ->
+                edit[loginIdSaveKey] = b
             }
         }
-            .map { pref ->
-                if (pref[loginIdSaveKey] != b) {
-                    edit { edit ->
-                        edit[loginIdSaveKey] = b
-                    }
-                }
-            }
     }
 
-    suspend fun deleteMemoryId() =
-        context.dataStore.edit { edit ->
-            edit.remove(saveIdKey)
-            edit[loginIdSaveKey] = false
-        }
-
-    suspend fun getSaveId(): Flow<String> = with(context.dataStore) {
+    fun getSaveId(): Flow<String> = with(context.dataStore) {
         data.catch { e ->
             if (e is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw e
             }
+        }.map { pref ->
+            pref[saveIdKey] ?: ""
         }
-            .map { pref ->
-                pref[saveIdKey] ?: ""
-            }
     }
 
-    suspend fun getSavePw(): Flow<String> = with(context.dataStore) {
+    fun getSavePw(): Flow<String> = with(context.dataStore) {
         data.catch { e ->
             if (e is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw e
             }
+        }.map { pref ->
+            pref[savePwKey] ?: ""
         }
-            .map { pref ->
-                pref[savePwKey] ?: ""
-            }
     }
 
-    suspend fun isMemoryId(): Flow<Boolean> = with(context.dataStore) {
+    fun isMemoryId(): Flow<Boolean> = with(context.dataStore) {
         data.catch { e ->
             if (e is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw e
             }
+        }.map { pref ->
+            pref[loginIdSaveKey] ?: false
         }
-            .map { pref ->
-                pref[loginIdSaveKey] ?: false
-            }
     }
 
-    suspend fun isAutoLogin(): Flow<Boolean> = with(context.dataStore) {
+    fun isAutoLogin(): Flow<Boolean> = with(context.dataStore) {
         data.catch { e ->
             if (e is IOException) {
                 emit(emptyPreferences())
             } else {
                 throw e
             }
+        }.map { pref ->
+            pref[autoLoginKey] ?: false
         }
-            .map { pref ->
-                pref[autoLoginKey] ?: false
-            }
     }
 }

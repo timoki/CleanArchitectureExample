@@ -1,7 +1,9 @@
 package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
+import com.example.data.mapper.ObjectMapper.toConfigDataModel
 import com.example.data.mapper.ObjectMapper.toDeviceInfo
+import com.example.data.mapper.ObjectMapper.toModel
 import com.example.data.mapper.ObjectMapper.toSiteMode
 import com.example.data.mapper.ObjectMapper.toUserInfo
 import com.example.data.model.config.*
@@ -33,7 +35,8 @@ object ObjectMapper {
         userIp = this.userIp,
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelListFromEntity(),
-        banner = this.banner.toModel()
+        banner = this.banner.toModel(),
+        link = this.link.toModel()
     )
 
     fun ConfigData.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
@@ -47,7 +50,8 @@ object ObjectMapper {
         userIp = this.userIp,
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelList(),
-        banner = this.banner.toModel()
+        banner = this.banner.toModel(),
+        link = this.link.toModel()
     )
 
     fun ConfigData.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
@@ -62,7 +66,8 @@ object ObjectMapper {
         userIp = this.userIp,
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityList(),
-        banner = this.banner.toEntity()
+        banner = this.banner.toEntity(),
+        link = this.link.toEntity()
     )
 
     fun ConfigDataModel.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
@@ -77,7 +82,8 @@ object ObjectMapper {
         userIp = this.userIp,
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityListFromModel(),
-        banner = this.banner.toEntity()
+        banner = this.banner.toEntity(),
+        link = this.link.toEntity()
     )
 
     // AdultCheck 시작
@@ -287,6 +293,172 @@ object ObjectMapper {
         type = this.type
     )
     // CategoryNew 끝
+
+    // Link 시작
+    private fun LinkEntity.toModel() = LinkModel(
+        adultAuth = this.adultAuth,
+        base = this.base,
+        channel = this.channel,
+        chargeFull = this.chargeFull,
+        chargeHeart = this.chargeHeart,
+        chargeItem = this.chargeItem,
+        chargeItemInfo = this.chargeItemInfo,
+        chargeItemInfoListUp = this.chargeItemInfoListUp,
+        chargeItemInfoUserUp = this.chargeItemInfoUserUp,
+        chargeItemInfoSaveUp = this.chargeItemInfoSaveUp,
+        chargeItemInfoFireRecom = this.chargeItemInfoFireRecom,
+        chargeItemInfoPushFan = this.chargeItemInfoPushFan,
+        chargeItemInfoPushBookMark = this.chargeItemInfoPushBookMark,
+        chargeItemInfoHeartEmo = this.chargeItemInfoHeartEmo,
+        chargeItemInfoListDeco = this.chargeItemInfoListDeco,
+        chargeItemInfoWorldMsg = this.chargeItemInfoWorldMsg,
+        chargeItemInfoGuestLive = this.chargeItemInfoGuestLive,
+        chargeItemInfoEntUnlimit = this.chargeItemInfoEntUnlimit,
+        chargeItemInfoNickDeco = this.chargeItemInfoNickDeco,
+        chargeItemInfoIntroEffect = this.chargeItemInfoIntroEffect,
+        event = this.event,
+        exchange = this.exchange,
+        findId = this.findId,
+        findPw = this.findPw,
+        freeLawConsult = this.freeLawConsult,
+        itemLog = this.itemLog,
+        join = this.join,
+        notice = this.notice,
+        policyMarketing = this.policyMarketing,
+        policyPrivacy = this.policyPrivacy,
+        policyService = this.policyService,
+        post = this.post,
+        reportCenter = this.reportCenter,
+        signatureGuide = this.signatureGuide,
+        socialLoginFACEBOOK = this.socialLoginFACEBOOK,
+        socialLoginGOOGLE = this.socialLoginGOOGLE,
+        socialLoginKAKAO = this.socialLoginKAKAO,
+        socialLoginNAVER = this.socialLoginNAVER
+    )
+
+    private fun LinkModel.toEntity() = LinkEntity(
+        adultAuth = this.adultAuth,
+        base = this.base,
+        channel = this.channel,
+        chargeFull = this.chargeFull,
+        chargeHeart = this.chargeHeart,
+        chargeItem = this.chargeItem,
+        chargeItemInfo = this.chargeItemInfo,
+        chargeItemInfoListUp = this.chargeItemInfoListUp,
+        chargeItemInfoUserUp = this.chargeItemInfoUserUp,
+        chargeItemInfoSaveUp = this.chargeItemInfoSaveUp,
+        chargeItemInfoFireRecom = this.chargeItemInfoFireRecom,
+        chargeItemInfoPushFan = this.chargeItemInfoPushFan,
+        chargeItemInfoPushBookMark = this.chargeItemInfoPushBookMark,
+        chargeItemInfoHeartEmo = this.chargeItemInfoHeartEmo,
+        chargeItemInfoListDeco = this.chargeItemInfoListDeco,
+        chargeItemInfoWorldMsg = this.chargeItemInfoWorldMsg,
+        chargeItemInfoGuestLive = this.chargeItemInfoGuestLive,
+        chargeItemInfoEntUnlimit = this.chargeItemInfoEntUnlimit,
+        chargeItemInfoNickDeco = this.chargeItemInfoNickDeco,
+        chargeItemInfoIntroEffect = this.chargeItemInfoIntroEffect,
+        event = this.event,
+        exchange = this.exchange,
+        findId = this.findId,
+        findPw = this.findPw,
+        freeLawConsult = this.freeLawConsult,
+        itemLog = this.itemLog,
+        join = this.join,
+        notice = this.notice,
+        policyMarketing = this.policyMarketing,
+        policyPrivacy = this.policyPrivacy,
+        policyService = this.policyService,
+        post = this.post,
+        reportCenter = this.reportCenter,
+        signatureGuide = this.signatureGuide,
+        socialLoginFACEBOOK = this.socialLoginFACEBOOK,
+        socialLoginGOOGLE = this.socialLoginGOOGLE,
+        socialLoginKAKAO = this.socialLoginKAKAO,
+        socialLoginNAVER = this.socialLoginNAVER
+    )
+
+    private fun Link.toEntity() = LinkEntity(
+        adultAuth = this.adultAuth,
+        base = this.base,
+        channel = this.channel,
+        chargeFull = this.chargeFull,
+        chargeHeart = this.chargeHeart,
+        chargeItem = this.chargeItem,
+        chargeItemInfo = this.chargeItemInfo,
+        chargeItemInfoListUp = this.chargeItemInfoListUp,
+        chargeItemInfoUserUp = this.chargeItemInfoUserUp,
+        chargeItemInfoSaveUp = this.chargeItemInfoSaveUp,
+        chargeItemInfoFireRecom = this.chargeItemInfoFireRecom,
+        chargeItemInfoPushFan = this.chargeItemInfoPushFan,
+        chargeItemInfoPushBookMark = this.chargeItemInfoPushBookMark,
+        chargeItemInfoHeartEmo = this.chargeItemInfoHeartEmo,
+        chargeItemInfoListDeco = this.chargeItemInfoListDeco,
+        chargeItemInfoWorldMsg = this.chargeItemInfoWorldMsg,
+        chargeItemInfoGuestLive = this.chargeItemInfoGuestLive,
+        chargeItemInfoEntUnlimit = this.chargeItemInfoEntUnlimit,
+        chargeItemInfoNickDeco = this.chargeItemInfoNickDeco,
+        chargeItemInfoIntroEffect = this.chargeItemInfoIntroEffect,
+        event = this.event,
+        exchange = this.exchange,
+        findId = this.findId,
+        findPw = this.findPw,
+        freeLawConsult = this.freeLawConsult,
+        itemLog = this.itemLog,
+        join = this.join,
+        notice = this.notice,
+        policyMarketing = this.policyMarketing,
+        policyPrivacy = this.policyPrivacy,
+        policyService = this.policyService,
+        post = this.post,
+        reportCenter = this.reportCenter,
+        signatureGuide = this.signatureGuide,
+        socialLoginFACEBOOK = this.socialLoginFACEBOOK,
+        socialLoginGOOGLE = this.socialLoginGOOGLE,
+        socialLoginKAKAO = this.socialLoginKAKAO,
+        socialLoginNAVER = this.socialLoginNAVER
+    )
+
+    private fun Link.toModel() = LinkModel(
+        adultAuth = this.adultAuth,
+        base = this.base,
+        channel = this.channel,
+        chargeFull = this.chargeFull,
+        chargeHeart = this.chargeHeart,
+        chargeItem = this.chargeItem,
+        chargeItemInfo = this.chargeItemInfo,
+        chargeItemInfoListUp = this.chargeItemInfoListUp,
+        chargeItemInfoUserUp = this.chargeItemInfoUserUp,
+        chargeItemInfoSaveUp = this.chargeItemInfoSaveUp,
+        chargeItemInfoFireRecom = this.chargeItemInfoFireRecom,
+        chargeItemInfoPushFan = this.chargeItemInfoPushFan,
+        chargeItemInfoPushBookMark = this.chargeItemInfoPushBookMark,
+        chargeItemInfoHeartEmo = this.chargeItemInfoHeartEmo,
+        chargeItemInfoListDeco = this.chargeItemInfoListDeco,
+        chargeItemInfoWorldMsg = this.chargeItemInfoWorldMsg,
+        chargeItemInfoGuestLive = this.chargeItemInfoGuestLive,
+        chargeItemInfoEntUnlimit = this.chargeItemInfoEntUnlimit,
+        chargeItemInfoNickDeco = this.chargeItemInfoNickDeco,
+        chargeItemInfoIntroEffect = this.chargeItemInfoIntroEffect,
+        event = this.event,
+        exchange = this.exchange,
+        findId = this.findId,
+        findPw = this.findPw,
+        freeLawConsult = this.freeLawConsult,
+        itemLog = this.itemLog,
+        join = this.join,
+        notice = this.notice,
+        policyMarketing = this.policyMarketing,
+        policyPrivacy = this.policyPrivacy,
+        policyService = this.policyService,
+        post = this.post,
+        reportCenter = this.reportCenter,
+        signatureGuide = this.signatureGuide,
+        socialLoginFACEBOOK = this.socialLoginFACEBOOK,
+        socialLoginGOOGLE = this.socialLoginGOOGLE,
+        socialLoginKAKAO = this.socialLoginKAKAO,
+        socialLoginNAVER = this.socialLoginNAVER
+    )
+    // Link 끝
 
     /**
      * Config 끝

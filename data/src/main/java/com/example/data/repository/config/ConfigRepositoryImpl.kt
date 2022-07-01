@@ -8,6 +8,7 @@ import com.example.domain.model.base.Result
 import com.example.domain.model.config.ConfigDataModel
 import com.example.domain.repository.ConfigRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -29,17 +30,22 @@ class ConfigRepositoryImpl @Inject constructor(
      */
     override fun getConfigData(): Flow<Result<ConfigDataModel>> =
         flow<Result<ConfigDataModel>> {
-            val localResponse = localDataSource.getConfigLocal()
-            localResponse?.let {
-                emit(Result.Success(it.toConfigDataModel()))
-                return@flow
-            }
 
             val response = remoteDataSource.getConfigRemote()
 
             if (response.isSuccessful) {
                 response.body()?.let {
-                    localDataSource.insertConfigLocal(it.toConfigDataEntity())
+                    coroutineScope {
+                        localDataSource.insertConfigLocal(it.toConfigDataEntity())
+                    }
+
+                    val localResponse = localDataSource.getConfigLocal()
+
+                    localResponse?.let { entity ->
+                        emit(Result.Success(entity.toConfigDataModel()))
+                        return@flow
+                    }
+
                     emit(Result.Success(it.toConfigDataModel()))
                 } ?: kotlin.run {
                     emit(Result.Error("예상하지 못한 오류가 발생하였습니다."))

@@ -1,6 +1,8 @@
 package com.example.cleanarchitectureexample.di
 
 import android.content.Context
+import com.example.cleanarchitectureexample.utils.ResourceProvider
+import com.example.cleanarchitectureexample.utils.ResourceProviderImpl
 import com.example.data.db.database.DataStoreModule
 import dagger.Module
 import dagger.Provides
@@ -19,5 +21,13 @@ object AppModule {
         @ApplicationContext context: Context
     ): DataStoreModule {
         return DataStoreModule(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideResourceProvider(
+        @ApplicationContext context: Context
+    ): ResourceProvider {
+        return ResourceProviderImpl(context)
     }
 }

@@ -34,13 +34,14 @@ data class ConfigDataEntity(
     @ColumnInfo(name = "categoryNew") // Converters Class 에 Json 변환 방식을 입력하여 자동으로 Json(String) 으로 변환되어 들어가고 나올때 List<CategoryNewEntity> 형식으로 배출됨
     val categoryNew: List<CategoryNewEntity>,
     @ColumnInfo(name = "banner") // 다중 Class 의 경우에도 Json 으로 처리하면 간편함(Embedded 처리 시 하위 클래스에 모두 Embedded 처리를 해야함)
-    val banner: BannerEntity
+    val banner: BannerEntity,
+    @ColumnInfo(name = "link")
+    val link: LinkEntity
 
     // 위에서 다른 경우를 다 변환 시켯으니 밑의 목록은 작업 X (연습이기 때문에 의미가 없음 반복)
     /*val chatMessage: ChatMessageModel,
     val chatMessageReplace: ChatMessageReplaceModel,
-    val debug: DebugModel,
-    val link: LinkModel,
+    val debug: DebugModel,,
     val newChat: NewChatModel,
     val server: ServerModel,
     val socialLogin: SocialLoginModel,

@@ -6,6 +6,8 @@ import com.example.cleanarchitectureexample.R
 enum class JoinHelperTypes(
     @StringRes val stringRes: Int
 ) {
+    EMPTY(R.string.empty_string),
+
     ID_NORMAL(R.string.id_check),
     PW_NORMAL(R.string.pw_check),
     PW_RE_NORMAL(R.string.pw_re),
