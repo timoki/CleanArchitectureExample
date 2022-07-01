@@ -48,6 +48,11 @@ class SignDialogFragment : DialogFragment() {
 
         mainViewModel.configApp.value?.let {
             viewModel.configApp.value = it
+
+            viewModel.kakao = it.socialLogin.getValue("KAKAO")
+            viewModel.naver = it.socialLogin.getValue("NAVER")
+            viewModel.google = it.socialLogin.getValue("GOOGLE")
+            viewModel.facebook = it.socialLogin.getValue("FACEBOOK")
         }
 
         initViewModelCallback()

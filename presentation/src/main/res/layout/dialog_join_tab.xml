@@ -3,8 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
 
         <import type="android.text.TextUtils"/>
+
         <import type="com.example.cleanarchitectureexample.utils.JoinHelperTypes" />
 
         <variable
@@ -44,25 +46,29 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/sns_google" />
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.kakao ? View.VISIBLE : View.GONE}" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/sns_google" />
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.naver ? View.VISIBLE : View.GONE}" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/sns_google" />
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.google ? View.VISIBLE : View.GONE}" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:src="@drawable/sns_google" />
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.facebook ? View.VISIBLE : View.GONE}" />
             </LinearLayout>
 
             <View

@@ -37,6 +37,10 @@ class SignDialogViewModel @Inject constructor(
 
     val configApp = MutableStateFlow<ConfigDataModel?>(null)
 
+    var kakao = false
+    var naver = false
+    var google = false
+    var facebook = false
     /** 기본 */
     //상단 X 아이콘 클릭
     private val _closeDialog = Channel<Unit>(Channel.CONFLATED)

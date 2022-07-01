@@ -15,7 +15,8 @@ data class ConfigDataModel(
     val adultCheck: AdultCheckModel,
     val categoryNew: List<CategoryNewModel>,
     val banner: BannerModel,
-    val link: LinkModel
+    val link: LinkModel,
+    val socialLogin: Map<String, Boolean>
 
     /*,
     val broadcast: Boolean,

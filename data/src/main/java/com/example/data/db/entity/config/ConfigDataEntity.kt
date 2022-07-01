@@ -36,7 +36,9 @@ data class ConfigDataEntity(
     @ColumnInfo(name = "banner") // 다중 Class 의 경우에도 Json 으로 처리하면 간편함(Embedded 처리 시 하위 클래스에 모두 Embedded 처리를 해야함)
     val banner: BannerEntity,
     @ColumnInfo(name = "link")
-    val link: LinkEntity
+    val link: LinkEntity,
+    @ColumnInfo(name = "socialLogin")
+    val socialLogin: Map<String, Boolean>
 
     // 위에서 다른 경우를 다 변환 시켯으니 밑의 목록은 작업 X (연습이기 때문에 의미가 없음 반복)
     /*val chatMessage: ChatMessageModel,

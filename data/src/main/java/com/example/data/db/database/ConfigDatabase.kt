@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.data.db.dao.ConfigDataDao
 import com.example.data.db.entity.config.*
-import com.example.data.mapper.Converters
+import com.example.data.db.converter.RoomConverters
 
 /**
  * Room Database 를 정의하고 DAO 를 반환한다
@@ -19,7 +19,7 @@ import com.example.data.mapper.Converters
     version = 3,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
+@TypeConverters(RoomConverters::class)
 abstract class ConfigDatabase : RoomDatabase() {
     abstract fun configDataDao(): ConfigDataDao
 }

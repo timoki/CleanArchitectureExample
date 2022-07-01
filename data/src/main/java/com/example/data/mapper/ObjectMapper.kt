@@ -36,7 +36,8 @@ object ObjectMapper {
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelListFromEntity(),
         banner = this.banner.toModel(),
-        link = this.link.toModel()
+        link = this.link.toModel(),
+        socialLogin = this.socialLogin
     )
 
     fun ConfigData.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
@@ -51,7 +52,8 @@ object ObjectMapper {
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelList(),
         banner = this.banner.toModel(),
-        link = this.link.toModel()
+        link = this.link.toModel(),
+        socialLogin = this.socialLogin
     )
 
     fun ConfigData.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
@@ -67,7 +69,8 @@ object ObjectMapper {
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityList(),
         banner = this.banner.toEntity(),
-        link = this.link.toEntity()
+        link = this.link.toEntity(),
+        socialLogin = this.socialLogin
     )
 
     fun ConfigDataModel.toConfigDataEntity(): ConfigDataEntity = ConfigDataEntity(
@@ -83,7 +86,8 @@ object ObjectMapper {
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityListFromModel(),
         banner = this.banner.toEntity(),
-        link = this.link.toEntity()
+        link = this.link.toEntity(),
+        socialLogin = this.socialLogin
     )
 
     // AdultCheck 시작

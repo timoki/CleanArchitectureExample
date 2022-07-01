@@ -1,4 +1,4 @@
-package com.example.data.mapper
+package com.example.data.db.converter
 
 import androidx.room.TypeConverter
 import com.example.data.db.entity.config.BannerEntity
@@ -7,13 +7,14 @@ import com.example.data.db.entity.config.LinkEntity
 import com.example.data.db.entity.config.MainEntity
 import com.example.domain.model.config.MainModel
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 /**
  * Local Database 에서 값을 가져오거나 저장할때 List 형식은 저장이 되지 않기 때문에 Converting 을 해주어야 한다.
  * Converting 이 필요한 모든 클래스를 작성하여야 한다.
  * Database Class 에서 해당 클래스를 @TypeConverters 어노테이션에 등록 해준다.
  * */
-class Converters {
+class RoomConverters {
     @TypeConverter
     fun stringListToJson(value: List<String>?) : String = Gson().toJson(value)
 
@@ -49,4 +50,15 @@ class Converters {
 
     @TypeConverter
     fun jsonToLink(value: String) : LinkEntity = Gson().fromJson(value, LinkEntity::class.java)
+
+    @TypeConverter
+    fun stringToMap(value: String): Map<String, Boolean> {
+        val type = object: TypeToken<Map<String?, Boolean?>?>(){}.type
+        return Gson().fromJson(value, type)
+    }
+
+    @TypeConverter
+    fun mapToString(value: Map<String, Boolean>): String {
+        return Gson().toJson(value)
+    }
 }

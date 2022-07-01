@@ -37,7 +37,7 @@ data class ConfigData(
     @SerializedName("server")
     val server: Server,
     @SerializedName("socialLogin")
-    val socialLogin: SocialLogin,
+    val socialLogin: Map<String, Boolean>,
     @SerializedName("socialServiceUrl")
     val socialServiceUrl: SocialServiceUrl,
     @SerializedName("update")
