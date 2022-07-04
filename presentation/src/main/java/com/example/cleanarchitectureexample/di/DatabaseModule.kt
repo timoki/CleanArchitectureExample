@@ -3,7 +3,9 @@ package com.example.cleanarchitectureexample.di
 import android.content.Context
 import androidx.room.Room
 import com.example.data.db.dao.ConfigDataDao
+import com.example.data.db.dao.LiveDataDao
 import com.example.data.db.database.ConfigDatabase
+import com.example.data.db.database.LiveDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,7 +34,26 @@ object DatabaseModule {
 
     @Singleton
     @Provides
+    fun provideLiveDatabase(
+        @ApplicationContext context: Context
+    ): LiveDatabase =
+        Room.databaseBuilder(
+            context,
+            LiveDatabase::class.java,
+            "liveData.db"
+        ).fallbackToDestructiveMigration()
+            .enableMultiInstanceInvalidation() // 프로세스 공유
+            .build()
+
+    @Singleton
+    @Provides
     fun provideConfigDao(
         db: ConfigDatabase
     ): ConfigDataDao = db.configDataDao()
+
+    @Singleton
+    @Provides
+    fun provideLiveDao(
+        db: LiveDatabase
+    ): LiveDataDao = db.liveDataDao()
 }

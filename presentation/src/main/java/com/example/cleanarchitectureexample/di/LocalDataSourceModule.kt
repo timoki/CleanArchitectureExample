@@ -1,6 +1,7 @@
 package com.example.cleanarchitectureexample.di
 
 import com.example.data.db.dao.ConfigDataDao
+import com.example.data.db.dao.LiveDataDao
 import com.example.data.repository.datasource.LocalDataSource
 import com.example.data.repository.datasource.impl.LocalDataSourceImpl
 import dagger.Module
@@ -15,6 +16,7 @@ object LocalDataSourceModule {
     @Singleton
     @Provides
     fun provideConfigLocalDataSource(
-        configDataDao: ConfigDataDao
-    ): LocalDataSource = LocalDataSourceImpl(configDataDao)
+        configDataDao: ConfigDataDao,
+        liveDataDao: LiveDataDao
+    ): LocalDataSource = LocalDataSourceImpl(configDataDao, liveDataDao)
 }

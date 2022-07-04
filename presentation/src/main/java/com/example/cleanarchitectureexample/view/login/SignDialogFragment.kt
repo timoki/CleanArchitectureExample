@@ -70,7 +70,7 @@ class SignDialogFragment : DialogFragment() {
         }
 
         loginSuccess.onEach {
-            mainViewModel.isLogin.value = it
+            mainViewModel.changeLoginState(it)
             dismiss()
         }.observeInLifecycle(viewLifecycleOwner)
 

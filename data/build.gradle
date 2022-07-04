@@ -57,4 +57,6 @@ dependencies {
     // dataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha07"
     implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
+
+    implementation "androidx.paging:paging-compose:1.0.0-alpha09"
 }

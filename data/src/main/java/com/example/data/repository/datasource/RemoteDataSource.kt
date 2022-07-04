@@ -2,6 +2,7 @@ package com.example.data.repository.datasource
 
 import com.example.data.model.config.ConfigData
 import com.example.data.model.defaultData.DefaultData
+import com.example.data.model.live.LiveResult
 import com.example.data.model.login.LoginData
 import retrofit2.Response
 
@@ -37,4 +38,11 @@ interface RemoteDataSource {
     ): Response<DefaultData>
 
     suspend fun memberLogout(): Response<DefaultData>
+
+    /** Live */
+    suspend fun getLive(
+        offset: Int,
+        limit: Int,
+        orderBy: String
+    ) : Response<LiveResult>
 }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="viewModel"
+            type="com.example.cleanarchitectureexample.view.main.adapter.LivelistAdapterViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                setUriImage="@{viewModel.liveThumbnail}"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="68dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ico_listup_premium"
+                    android:layout_alignParentRight="true"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="7.5dp"
+                    android:layout_marginBottom="7.5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ico_19"
+                            android:visibility="@{viewModel.isAdult() ? View.VISIBLE : View.GONE}" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3dp"
+                            android:src="@drawable/ico_class_v"
+                            android:visibility="@{viewModel.isAdult() ? View.VISIBLE : View.GONE}" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="3.5dp"
+                            android:src="@drawable/ico_lock"
+                            android:visibility="@{viewModel.isLock() ? View.VISIBLE : View.GONE}" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4.5dp"
+                            android:layout_marginRight="4dp"
+                            android:src="@drawable/ico_mobile"
+                            android:visibility="@{viewModel.isMobile() ? View.VISIBLE : View.GONE}" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="@{viewModel.title}"
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                        android:includeFontPadding="false"
+                        android:text="@{viewModel.userNick}"
+                        android:textColor="@color/text_dark_grey"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                            android:includeFontPadding="false"
+                            android:text="@{viewModel.userCnt}"
+                            android:textColor="@color/text_dark_grey"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                            android:includeFontPadding="false"
+                            android:text="@{viewModel.playCnt}"
+                            android:textColor="@color/text_dark_grey"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                            android:includeFontPadding="false"
+                            android:text="@{viewModel.startTime}"
+                            android:textColor="@color/text_dark_grey"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -1,18 +1,22 @@
 package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
+import com.example.data.db.entity.live.LiveListEntity
 import com.example.data.mapper.ObjectMapper.toConfigDataModel
 import com.example.data.mapper.ObjectMapper.toDeviceInfo
+import com.example.data.mapper.ObjectMapper.toLiveListEntity
 import com.example.data.mapper.ObjectMapper.toModel
 import com.example.data.mapper.ObjectMapper.toSiteMode
 import com.example.data.mapper.ObjectMapper.toUserInfo
 import com.example.data.model.config.*
 import com.example.data.model.defaultData.DefaultData
 import com.example.data.model.defaultData.ErrorData
+import com.example.data.model.live.LiveList
 import com.example.data.model.login.*
 import com.example.domain.model.config.*
 import com.example.domain.model.defaultData.DefaultDataModel
 import com.example.domain.model.defaultData.ErrorDataModel
+import com.example.domain.model.live.LiveListModel
 import com.example.domain.model.login.*
 
 /**
@@ -595,5 +599,175 @@ object ObjectMapper {
 
     /**
      * User 끝
+     * */
+
+    /**
+     * Live 시작
+     * */
+
+    fun List<LiveListModel>.toLiveListEntityFromModel(): List<LiveListEntity> = map {
+        it.toLiveListEntity()
+    }
+
+    private fun LiveListModel.toLiveListEntity(): LiveListEntity = LiveListEntity(
+        id = 0,
+        bookmarkCnt = this.bookmarkCnt,
+        browser = this.browser,
+        category = this.category,
+        code = this.code,
+        endTime = this.endTime,
+        fanCnt = this.fanCnt,
+        heart = this.heart,
+        isAdult = this.isAdult,
+        isGuestLive = this.isGuestLive,
+        isLive = this.isLive,
+        isPw = this.isPw,
+        ivsThumbnail = this.ivsThumbnail,
+        likeCnt = this.likeCnt,
+        listDeco = this.listDeco,
+        listUp = this.listUp,
+        liveType = this.liveType,
+        playCnt = this.playCnt,
+        sizeHeight = this.sizeHeight,
+        sizeWidth = this.sizeWidth,
+        startTime = this.startTime,
+        storage = this.storage,
+        thumbUrl = this.thumbUrl,
+        thumbUrlOrigin = this.thumbUrlOrigin,
+        title = this.title,
+        totalScoreCnt = this.totalScoreCnt,
+        type = this.type,
+        user = this.user,
+        userId = this.userId,
+        userIdx = this.userIdx,
+        userImg = this.userImg,
+        userLimit = this.userLimit,
+        userNick = this.userNick,
+        userUp = this.userUp,
+    )
+
+    fun List<LiveList>.toLiveListEntityFromList(): List<LiveListEntity> = map {
+        it.toLiveListEntity()
+    }
+
+    private fun LiveList.toLiveListEntity(): LiveListEntity = LiveListEntity(
+        id = 0,
+        bookmarkCnt = this.bookmarkCnt,
+        browser = this.browser,
+        category = this.category,
+        code = this.code,
+        endTime = this.endTime,
+        fanCnt = this.fanCnt,
+        heart = this.heart,
+        isAdult = this.isAdult,
+        isGuestLive = this.isGuestLive,
+        isLive = this.isLive,
+        isPw = this.isPw,
+        ivsThumbnail = this.ivsThumbnail,
+        likeCnt = this.likeCnt,
+        listDeco = this.listDeco,
+        listUp = this.listUp,
+        liveType = this.liveType,
+        playCnt = this.playCnt,
+        sizeHeight = this.sizeHeight,
+        sizeWidth = this.sizeWidth,
+        startTime = this.startTime,
+        storage = this.storage,
+        thumbUrl = this.thumbUrl,
+        thumbUrlOrigin = this.thumbUrlOrigin,
+        title = this.title,
+        totalScoreCnt = this.totalScoreCnt,
+        type = this.type,
+        user = this.user,
+        userId = this.userId,
+        userIdx = this.userIdx,
+        userImg = this.userImg,
+        userLimit = this.userLimit,
+        userNick = this.userNick,
+        userUp = this.userUp,
+    )
+
+    fun List<LiveListEntity>.toLiveListModelFromEntity(): List<LiveListModel> = map {
+        it.toLiveListModel()
+    }
+
+    private fun LiveListEntity.toLiveListModel(): LiveListModel = LiveListModel(
+        bookmarkCnt = this.bookmarkCnt,
+        browser = this.browser,
+        category = this.category,
+        code = this.code,
+        endTime = this.endTime,
+        fanCnt = this.fanCnt,
+        heart = this.heart,
+        isAdult = this.isAdult,
+        isGuestLive = this.isGuestLive,
+        isLive = this.isLive,
+        isPw = this.isPw,
+        ivsThumbnail = this.ivsThumbnail,
+        likeCnt = this.likeCnt,
+        listDeco = this.listDeco,
+        listUp = this.listUp,
+        liveType = this.liveType,
+        playCnt = this.playCnt,
+        sizeHeight = this.sizeHeight,
+        sizeWidth = this.sizeWidth,
+        startTime = this.startTime,
+        storage = this.storage,
+        thumbUrl = this.thumbUrl,
+        thumbUrlOrigin = this.thumbUrlOrigin,
+        title = this.title,
+        totalScoreCnt = this.totalScoreCnt,
+        type = this.type,
+        user = this.user,
+        userId = this.userId,
+        userIdx = this.userIdx,
+        userImg = this.userImg,
+        userLimit = this.userLimit,
+        userNick = this.userNick,
+        userUp = this.userUp,
+    )
+
+    fun List<LiveList>.toLiveListModelFromList(): List<LiveListModel> = map {
+        it.toLiveListModel()
+    }
+
+    private fun LiveList.toLiveListModel(): LiveListModel = LiveListModel(
+        bookmarkCnt = this.bookmarkCnt,
+        browser = this.browser,
+        category = this.category,
+        code = this.code,
+        endTime = this.endTime,
+        fanCnt = this.fanCnt,
+        heart = this.heart,
+        isAdult = this.isAdult,
+        isGuestLive = this.isGuestLive,
+        isLive = this.isLive,
+        isPw = this.isPw,
+        ivsThumbnail = this.ivsThumbnail,
+        likeCnt = this.likeCnt,
+        listDeco = this.listDeco,
+        listUp = this.listUp,
+        liveType = this.liveType,
+        playCnt = this.playCnt,
+        sizeHeight = this.sizeHeight,
+        sizeWidth = this.sizeWidth,
+        startTime = this.startTime,
+        storage = this.storage,
+        thumbUrl = this.thumbUrl,
+        thumbUrlOrigin = this.thumbUrlOrigin,
+        title = this.title,
+        totalScoreCnt = this.totalScoreCnt,
+        type = this.type,
+        user = this.user,
+        userId = this.userId,
+        userIdx = this.userIdx,
+        userImg = this.userImg,
+        userLimit = this.userLimit,
+        userNick = this.userNick,
+        userUp = this.userUp,
+    )
+
+    /**
+     * Live 끝
      * */
 }

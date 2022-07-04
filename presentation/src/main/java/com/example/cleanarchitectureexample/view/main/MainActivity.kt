@@ -13,6 +13,7 @@ import com.example.cleanarchitectureexample.databinding.ActivityMainBinding
 import com.example.cleanarchitectureexample.utils.observeInLifecycle
 import com.example.cleanarchitectureexample.utils.observeOnLifecycle
 import com.example.cleanarchitectureexample.view.login.SignDialogFragment
+import com.example.cleanarchitectureexample.view.main.adapter.LiveListDataAdapter
 import com.example.data.db.database.DataStoreModule
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val viewModel: MainViewModel by viewModels()
+
+    private val adapter by lazy {
+        LiveListDataAdapter()
+    }
 
     @Inject
     lateinit var dataStore: DataStoreModule
@@ -65,6 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         initViewModelCallback()
 
+        mBinding.list.adapter = adapter
     }
 
     private fun initViewModelCallback() = with(viewModel) {
@@ -83,7 +89,6 @@ class MainActivity : AppCompatActivity() {
                 else "${isLogin.value?.loginInfo?.userInfo?.nick} 님이 로그아웃 하였습니다.",
                 Toast.LENGTH_SHORT
             ).show()
-
         }
 
         loginClickChannel.onEach {
@@ -98,6 +103,12 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             if (dataStore.isAutoLogin().first()) {
                 viewModel.login()
+            }
+        }
+
+        liveListData.observeOnLifecycle(this@MainActivity) { data ->
+            data?.let {
+                adapter.submitData(data)
             }
         }
     }

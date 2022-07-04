@@ -6,6 +6,7 @@ import androidx.room.TypeConverters
 import com.example.data.db.dao.ConfigDataDao
 import com.example.data.db.entity.config.*
 import com.example.data.db.converter.RoomConverters
+import com.example.data.db.entity.live.LiveListEntity
 
 /**
  * Room Database 를 정의하고 DAO 를 반환한다
@@ -16,7 +17,7 @@ import com.example.data.db.converter.RoomConverters
     entities = [
         ConfigDataEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(RoomConverters::class)

@@ -3,6 +3,7 @@ package com.example.cleanarchitectureexample.di
 import androidx.viewbinding.BuildConfig
 import com.example.data.api.ApiService
 import com.example.domain.model.base.Constants
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,6 +50,7 @@ object ApiModule {
         interceptor: HttpLoggingInterceptor
     ) : OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor)
+        .addNetworkInterceptor(StethoInterceptor())
         .build()
 
     @Singleton
@@ -58,7 +60,7 @@ object ApiModule {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
             } else {
-                HttpLoggingInterceptor.Level.NONE
+                HttpLoggingInterceptor.Level.BODY
             }
         }
 }

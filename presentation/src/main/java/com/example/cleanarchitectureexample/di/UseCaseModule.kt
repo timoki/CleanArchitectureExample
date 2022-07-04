@@ -1,10 +1,12 @@
 package com.example.cleanarchitectureexample.di
 
 import com.example.domain.repository.ConfigRepository
+import com.example.domain.repository.LiveRepository
 import com.example.domain.repository.MemberRepository
 import com.example.domain.usecase.config.DeleteConfigLocalUseCase
 import com.example.domain.usecase.config.GetConfigUseCase
 import com.example.domain.usecase.config.InsertConfigLocalUseCase
+import com.example.domain.usecase.live.RequestGetLiveRemoteUseCase
 import com.example.domain.usecase.member.*
 import dagger.Module
 import dagger.Provides
@@ -68,4 +70,10 @@ object UseCaseModule {
     fun provideRequestMemberLogoutUseCase(
         memberRepository: MemberRepository
     ): RequestMemberLogoutUseCase = RequestMemberLogoutUseCase(memberRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestGetLiveRemoteUseCase(
+        liveRepository: LiveRepository
+    ): RequestGetLiveRemoteUseCase = RequestGetLiveRemoteUseCase(liveRepository)
 }

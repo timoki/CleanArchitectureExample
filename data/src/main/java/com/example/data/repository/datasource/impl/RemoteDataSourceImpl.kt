@@ -3,6 +3,7 @@ package com.example.data.repository.datasource.impl
 import com.example.data.api.ApiService
 import com.example.data.model.config.ConfigData
 import com.example.data.model.defaultData.DefaultData
+import com.example.data.model.live.LiveResult
 import com.example.data.model.login.LoginData
 import com.example.data.repository.datasource.RemoteDataSource
 import retrofit2.Response
@@ -43,5 +44,13 @@ class RemoteDataSourceImpl @Inject constructor(
 
     override suspend fun memberLogout(): Response<DefaultData> {
         return service.memberLogout()
+    }
+
+    override suspend fun getLive(
+        offset: Int,
+        limit: Int,
+        orderBy: String
+    ): Response<LiveResult> {
+        return service.getLiveList(offset, limit, orderBy)
     }
 }

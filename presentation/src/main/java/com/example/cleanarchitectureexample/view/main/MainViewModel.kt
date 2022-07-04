@@ -3,13 +3,16 @@ package com.example.cleanarchitectureexample.view.main
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.utils.ResourceProvider
 import com.example.data.db.database.DataStoreModule
 import com.example.domain.model.base.Result
 import com.example.domain.model.config.ConfigDataModel
+import com.example.domain.model.live.LiveListModel
 import com.example.domain.model.login.LoginDataModel
 import com.example.domain.usecase.config.GetConfigUseCase
+import com.example.domain.usecase.live.RequestGetLiveRemoteUseCase
 import com.example.domain.usecase.member.RequestMemberLoginUseCase
 import com.example.domain.usecase.member.RequestMemberLogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +26,7 @@ class MainViewModel @Inject constructor(
     private val getConfigUseCase: GetConfigUseCase,
     private val logoutUseCase: RequestMemberLogoutUseCase,
     private val requestMemberLoginUseCase: RequestMemberLoginUseCase,
+    private val requestGetLiveRemoteUseCase: RequestGetLiveRemoteUseCase,
     private val dataStore: DataStoreModule,
     private val resource: ResourceProvider
 ): ViewModel() {
@@ -40,6 +44,12 @@ class MainViewModel @Inject constructor(
 
     private val _loginClickChannel = Channel<Unit>(Channel.CONFLATED)
     val loginClickChannel = _loginClickChannel.receiveAsFlow()
+
+    private val _liveListData = MutableStateFlow<PagingData<LiveListModel>?>(null)
+    val liveListData
+        get() = _liveListData.asStateFlow()
+
+    var offset: Int = 0
 
     private fun requestGetConfig() = getConfigUseCase()
         .stateIn( // Flow 를 StateFlow 로 변환하는 작업
@@ -104,7 +114,7 @@ class MainViewModel @Inject constructor(
                 is Result.Success -> {
                     _isShowProgress.value = false
                     if (type.data?.result == true) {
-                        isLogin.value = null
+                        changeLoginState(null)
                         if (!dataStore.isMemoryId().first()) {
                             dataStore.saveId("")
                         }
@@ -135,7 +145,7 @@ class MainViewModel @Inject constructor(
 
     fun login() = viewModelScope.launch {
         val id = dataStore.getSaveId().first()
-        val pw = dataStore.getSaveId().first()
+        val pw = dataStore.getSavePw().first()
         if (id.isNotEmpty() && pw.isNotEmpty()) {
             requestLogin(id, pw).collect { type ->
                 when (type) {
@@ -147,7 +157,7 @@ class MainViewModel @Inject constructor(
                         _isShowProgress.value = false
 
                         if (type.data?.result == true) {
-                            isLogin.value = type.data
+                            changeLoginState(type.data)
                         } else {
                             _networkError.send(resource.getString(R.string.warning_auto_login))
                         }
@@ -167,6 +177,28 @@ class MainViewModel @Inject constructor(
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun requestGetLive(
+        limit: Int,
+        orderBy: String
+    ): StateFlow<PagingData<LiveListModel>?> = requestGetLiveRemoteUseCase(limit, orderBy)
+        .stateIn( // Flow 를 StateFlow 로 변환하는 작업
+            scope = viewModelScope, //CoroutineScope 명시
+            started = SharingStarted.WhileSubscribed(5_000), //Flow 로부터 언제부터 구독을 할지 명시(SharingStarted : Collector 가 등록되면 바로 시작, WhileSubscribed : Collector 가 없어지면 5초 후 중지)
+            initialValue = null
+        )
+
+    fun changeLoginState(data: LoginDataModel?) = viewModelScope.launch {
+        isLogin.value = data
+        if (data != null) {
+            requestGetLive(
+                20,
+                "startDateTime"
+            ).collectLatest {
+                _liveListData.value = it
             }
         }
     }

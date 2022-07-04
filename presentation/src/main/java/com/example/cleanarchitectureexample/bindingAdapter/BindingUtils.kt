@@ -1,9 +1,11 @@
 package com.example.cleanarchitectureexample.bindingAdapter
 
 import android.text.TextWatcher
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.utils.FontsTypes
 import com.example.cleanarchitectureexample.utils.JoinHelperTypes
@@ -31,4 +33,12 @@ fun TextInputLayout.helperText(type: JoinHelperTypes) {
 @BindingAdapter("textWatcher")
 fun TextInputEditText.textWatcher(watcher: TextWatcher) {
     addTextChangedListener(watcher)
+}
+
+@BindingAdapter("setUriImage")
+fun ImageView.setUriImage(uri: String) {
+    Glide
+        .with(context)
+        .load(uri)
+        .into(this)
 }

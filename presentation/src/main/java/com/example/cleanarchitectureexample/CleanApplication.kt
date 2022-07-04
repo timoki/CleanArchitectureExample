@@ -3,6 +3,7 @@ package com.example.cleanarchitectureexample
 import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
+import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -24,6 +25,6 @@ class CleanApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        Stetho.initializeWithDefaults(this)
     }
 }
