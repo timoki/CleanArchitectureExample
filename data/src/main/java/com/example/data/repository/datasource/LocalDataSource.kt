@@ -1,7 +1,9 @@
 package com.example.data.repository.datasource
 
+import androidx.paging.PagingSource
 import com.example.data.db.entity.config.ConfigDataEntity
 import com.example.data.db.entity.live.LiveListEntity
+import com.example.data.db.entity.live.LiveRemoteKey
 
 /**
  * DataSource 의 역할은 View 에서 요청이 올 경우 Repository 에서 Local 인지 Remote 인지 파악 후 각 상황에 맞는 DataSource 로 분리하여 보낼수 있게 분기점을 생성하는 것이다.
@@ -15,9 +17,17 @@ interface LocalDataSource {
 
     suspend fun deleteConfigLocal(configData: ConfigDataEntity)
 
-    suspend fun getLiveAll(): List<LiveListEntity>
+    fun getLiveAll(): PagingSource<Int, LiveListEntity>
 
-    suspend fun getLive(_id: Int): LiveListEntity?
+    fun getLive(idValue: Int): LiveListEntity?
 
     suspend fun insertLiveLocal(liveData: List<LiveListEntity>)
+
+    suspend fun deleteLiveDataAll()
+
+    suspend fun insertLiveKeysAll(remoteKey: List<LiveRemoteKey>)
+
+    suspend fun remoteKeysLiveId(liveId: Long): LiveRemoteKey?
+
+    suspend fun clearRemoteKeys()
 }

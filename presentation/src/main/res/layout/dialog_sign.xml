@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -26,9 +27,10 @@
             android:id="@+id/imageClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="@{() -> signViewModel.closeButtonClick()}"
             android:src="@drawable/popup_btn_close"
-            android:onClick="@{() -> signViewModel.closeButtonClick()}"/>
+            tools:ignore="ContentDescription" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +49,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        font="@{signViewModel.isSelectedToLoginTab ? FontsTypes.MEDIUM : FontsTypes.REGULAR}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -57,12 +58,11 @@
                         android:text="@string/login"
                         android:textColor="@{signViewModel.isSelectedToLoginTab ? @color/black : @color/text_grey}"
                         android:textSize="15sp"
+                        app:setTypeFace="@{signViewModel.isSelectedToLoginTab ? FontsTypes.MEDIUM : FontsTypes.REGULAR}"
                         tools:background="@drawable/fill_white_radius_top_14"
-                        tools:fontFamily="@font/noto_sans_cjk_kr_medium"
                         tools:textColor="@color/black" />
 
                     <TextView
-                        font="@{signViewModel.isSelectedToLoginTab ? FontsTypes.REGULAR : FontsTypes.MEDIUM}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -72,8 +72,8 @@
                         android:text="@string/join"
                         android:textColor="@{signViewModel.isSelectedToLoginTab ? @color/text_grey : @color/black}"
                         android:textSize="15sp"
+                        app:setTypeFace="@{signViewModel.isSelectedToLoginTab ? FontsTypes.REGULAR : FontsTypes.MEDIUM}"
                         tools:background="@drawable/fill_disable_radius_top_14"
-                        tools:fontFamily="@font/noto_sans_cjk_kr_regular"
                         tools:textColor="@color/text_grey" />
                 </LinearLayout>
 
@@ -82,6 +82,7 @@
                     android:layout_height="match_parent"
                     android:layout_centerInParent="true"
                     android:src="@{signViewModel.isSelectedToLoginTab ? @drawable/tab_menu_bg : @drawable/tab_menu_bg_02}"
+                    tools:ignore="ContentDescription"
                     tools:src="@drawable/tab_menu_bg" />
             </RelativeLayout>
 

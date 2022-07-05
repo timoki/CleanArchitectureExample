@@ -6,8 +6,6 @@ import com.google.gson.annotations.SerializedName
  * Data Layer(Module)의 Model Response 는 Remote Data Class 라고 보면 된다.
  * */
 data class ConfigData(
-    @SerializedName("idx")
-    val idx: Int,
     @SerializedName("appMutex")
     val appMutex: Boolean,
     @SerializedName("adultCheck")
@@ -41,8 +39,6 @@ data class ConfigData(
     @SerializedName("socialServiceUrl")
     val socialServiceUrl: SocialServiceUrl,
     @SerializedName("update")
-    val update: List<Any>,
-    @SerializedName("userIp")
-    val userIp: String
+    val update: List<Any>
 )
 

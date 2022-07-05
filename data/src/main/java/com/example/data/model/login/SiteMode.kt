@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class SiteMode(
     @SerializedName("mode")
-    val mode: String?,
+    val mode: String,
     @SerializedName("needAuth")
-    val needAuth: Boolean?,
+    val needAuth: Boolean,
     @SerializedName("type")
-    val type: String?
+    val type: String
 )

@@ -3,7 +3,8 @@ package com.example.cleanarchitectureexample.di
 import android.content.Context
 import androidx.room.Room
 import com.example.data.db.dao.ConfigDataDao
-import com.example.data.db.dao.LiveDataDao
+import com.example.data.db.dao.live.LiveDataDao
+import com.example.data.db.dao.live.LiveRemoteKeysDao
 import com.example.data.db.database.ConfigDatabase
 import com.example.data.db.database.LiveDatabase
 import dagger.Module
@@ -56,4 +57,10 @@ object DatabaseModule {
     fun provideLiveDao(
         db: LiveDatabase
     ): LiveDataDao = db.liveDataDao()
+
+    @Singleton
+    @Provides
+    fun provideLiveRemoteKeysDao(
+        db: LiveDatabase
+    ): LiveRemoteKeysDao = db.liveRemoteKeysDao()
 }

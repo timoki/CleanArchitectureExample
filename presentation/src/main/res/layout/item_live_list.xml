@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
 
         <variable
-            name="viewModel"
-            type="com.example.cleanarchitectureexample.view.main.adapter.LivelistAdapterViewModel" />
+            name="info"
+            type="com.example.domain.model.live.LiveListModel" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginLeft="12dp">
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -24,9 +26,10 @@
             android:orientation="horizontal">
 
             <ImageView
+                app:setUriImage="@{info.thumbUrl}"
                 android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                setUriImage="@{viewModel.liveThumbnail}"/>
+                android:layout_height="68dp"
+                tools:ignore="ContentDescription" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -35,49 +38,54 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:src="@drawable/ico_listup_premium"
-                    android:layout_alignParentRight="true"/>
+                    tools:ignore="ContentDescription" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginTop="7.5dp"
                     android:layout_marginBottom="7.5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ico_19"
-                            android:visibility="@{viewModel.isAdult() ? View.VISIBLE : View.GONE}" />
+                            android:visibility="@{info.isAdult ? View.VISIBLE : View.GONE}"
+                            tools:ignore="ContentDescription" />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="3dp"
+                            android:layout_marginStart="3dp"
                             android:src="@drawable/ico_class_v"
-                            android:visibility="@{viewModel.isAdult() ? View.VISIBLE : View.GONE}" />
+                            android:visibility="@{!info.type.equals(`free`) ? View.VISIBLE : View.GONE}"
+                            tools:ignore="ContentDescription" />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="3.5dp"
+                            android:layout_marginStart="3.5dp"
                             android:src="@drawable/ico_lock"
-                            android:visibility="@{viewModel.isLock() ? View.VISIBLE : View.GONE}" />
+                            android:visibility="@{info.isPw ? View.VISIBLE : View.GONE}"
+                            tools:ignore="ContentDescription" />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="4.5dp"
-                            android:layout_marginRight="4dp"
+                            android:layout_marginStart="4.5dp"
+                            android:layout_marginEnd="4dp"
                             android:src="@drawable/ico_mobile"
-                            android:visibility="@{viewModel.isMobile() ? View.VISIBLE : View.GONE}" />
+                            android:visibility="@{!info.browser.equals(`win`) ? View.VISIBLE : View.GONE}"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -86,7 +94,7 @@
                             android:fontFamily="@font/noto_sans_cjk_kr_regular"
                             android:includeFontPadding="false"
                             android:maxLines="1"
-                            android:text="@{viewModel.title}"
+                            android:text="@{info.title}"
                             android:textColor="@color/black"
                             android:textSize="15sp" />
                     </LinearLayout>
@@ -98,7 +106,7 @@
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/noto_sans_cjk_kr_regular"
                         android:includeFontPadding="false"
-                        android:text="@{viewModel.userNick}"
+                        android:text="@{info.userNick}"
                         android:textColor="@color/text_dark_grey"
                         android:textSize="13sp" />
 
@@ -114,33 +122,32 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/noto_sans_cjk_kr_regular"
                             android:includeFontPadding="false"
-                            android:text="@{viewModel.userCnt}"
+                            android:text="@{Integer.toString(info.user)}"
                             android:textColor="@color/text_dark_grey"
                             android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:fontFamily="@font/noto_sans_cjk_kr_regular"
                             android:includeFontPadding="false"
-                            android:text="@{viewModel.playCnt}"
+                            android:text="@{Integer.toString(info.playCnt)}"
                             android:textColor="@color/text_dark_grey"
                             android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:fontFamily="@font/noto_sans_cjk_kr_regular"
                             android:includeFontPadding="false"
-                            android:text="@{viewModel.startTime}"
+                            android:text="@{info.startTime}"
                             android:textColor="@color/text_dark_grey"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>

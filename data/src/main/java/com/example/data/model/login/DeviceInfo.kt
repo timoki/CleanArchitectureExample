@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DeviceInfo(
     @SerializedName("type")
-    val type: String?,
+    val type: String,
     @SerializedName("version")
-    val version: String?
+    val version: String
 )

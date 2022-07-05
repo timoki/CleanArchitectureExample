@@ -1,64 +1,42 @@
 package com.example.data.repository.live
 
-import com.example.data.mapper.ObjectMapper.toConfigDataEntity
-import com.example.data.mapper.ObjectMapper.toConfigDataModel
-import com.example.data.mapper.ObjectMapper.toLiveListEntityFromList
-import com.example.data.mapper.ObjectMapper.toLiveListModelFromEntity
-import com.example.data.mapper.ObjectMapper.toLiveListModelFromList
+import androidx.paging.*
+import com.example.data.db.database.LiveDatabase
+import com.example.data.mapper.ObjectMapper.toModel
+import com.example.data.repository.datasource.LiveRemoteMediator
 import com.example.data.repository.datasource.LocalDataSource
 import com.example.data.repository.datasource.RemoteDataSource
-import com.example.domain.model.base.Result
-import com.example.domain.model.config.ConfigDataModel
 import com.example.domain.model.live.LiveListModel
-import com.example.domain.model.live.LiveResultModel
-import com.example.domain.repository.ConfigRepository
 import com.example.domain.repository.LiveRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LiveRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+    private val database: LiveDatabase
 ) : LiveRepository {
+    @OptIn(ExperimentalPagingApi::class)
     override fun getLiveData(
-        offset: Int,
         limit: Int,
         orderBy: String
-    ): Flow<Result<List<LiveListModel>>> =
-        flow<Result<List<LiveListModel>>> {
-
-            val response = remoteDataSource.getLive(offset, limit, orderBy)
-
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    coroutineScope {
-                        localDataSource.insertLiveLocal(it.list.toLiveListEntityFromList())
-                    }
-
-                    val localResponse = localDataSource.getLiveAll()
-
-                    /*localResponse?.let { entity ->
-                        emit(Result.Success(entity.toLiveListModelFromEntity()))
-                        return@flow
-                    }*/
-
-                    emit(Result.Success(it.list.toLiveListModelFromList()))
-                } ?: kotlin.run {
-                    emit(Result.Error("예상하지 못한 오류가 발생하였습니다."))
-                }
-            } else {
-                emit(Result.NetworkError("네트워크 요청에 실패하셨습니다. 잠시 후 다시 시도해 주세요."))
+    ): Flow<PagingData<LiveListModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = limit, enablePlaceholders = false, prefetchDistance = 2),
+            remoteMediator = LiveRemoteMediator(
+                localDataSource = localDataSource,
+                remoteDataSource = remoteDataSource,
+                database = database
+            )
+        ) {
+            localDataSource.getLiveAll()
+        }.flow.map {
+            it.map { data ->
+                data.toModel()
             }
-        }.catch { e ->
-            emit(Result.Error(e.message))
         }.flowOn(Dispatchers.IO)
-
-    companion object {
-        private const val TAG = "LiveRepositoryImpl"
     }
 }

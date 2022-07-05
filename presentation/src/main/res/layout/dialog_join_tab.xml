@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
 
-        <import type="android.text.TextUtils"/>
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
 
         <import type="com.example.cleanarchitectureexample.utils.JoinHelperTypes" />
 
@@ -47,28 +49,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/sns_google"
-                    android:visibility="@{signViewModel.kakao ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{signViewModel.kakao ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/sns_google"
-                    android:visibility="@{signViewModel.naver ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{signViewModel.naver ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/sns_google"
-                    android:visibility="@{signViewModel.google ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{signViewModel.google ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/sns_google"
-                    android:visibility="@{signViewModel.facebook ? View.VISIBLE : View.GONE}" />
+                    android:visibility="@{signViewModel.facebook ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
             <View
@@ -93,14 +99,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:hint="@string/id"
-                helperText="@{signViewModel.joinIdHelperText}"
+                app:helperText="@{signViewModel.joinIdHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/AppEditTextAppearance"
-                    textWatcher="@{signViewModel.joinIdTextWatcher}"
+                    app:textWatcher="@{signViewModel.joinIdTextWatcher}"
                     android:text="@={signViewModel.joinIdText}"
                     android:inputType="text"
                     android:maxLines="1"
@@ -112,18 +118,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/pw"
-                helperText="@{signViewModel.joinPwHelperText}"
+                app:helperText="@{signViewModel.joinPwHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
                     style="@style/AppEditTextAppearance"
-                    textWatcher="@{signViewModel.joinPwTextWatcher}"
                     android:text="@={signViewModel.joinPwText}"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:imeOptions="actionNext"/>
+                    app:textWatcher="@{signViewModel.joinPwTextWatcher}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -131,18 +137,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/pw_re"
-                helperText="@{signViewModel.joinPwReHelperText}"
+                app:helperText="@{signViewModel.joinPwReHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
                     style="@style/AppEditTextAppearance"
-                    textWatcher="@{signViewModel.joinPwReTextWatcher}"
                     android:text="@={signViewModel.joinPwReText}"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:imeOptions="actionNext"/>
+                    app:textWatcher="@{signViewModel.joinPwReTextWatcher}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -150,18 +156,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="23dp"
                 android:hint="@string/nickname"
-                helperText="@{signViewModel.joinNickHelperText}"
+                app:helperText="@{signViewModel.joinNickHelperText}"
                 style="@style/AppEditTextStyle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
                     style="@style/AppEditTextAppearance"
-                    textWatcher="@{signViewModel.joinNickTextWatcher}"
                     android:text="@={signViewModel.joinNickText}"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:imeOptions="actionDone"/>
+                    app:textWatcher="@{signViewModel.joinNickTextWatcher}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -179,13 +185,15 @@
                     android:paddingBottom="14dp"
                     android:paddingTop="14dp"
                     android:onClick="@{() -> signViewModel.onAllAgree()}"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    tools:ignore="RtlSymmetry">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@{signViewModel.allAgree ? @drawable/checkbox_01_on : @drawable/checkbox_01}"
-                        tools:src="@drawable/checkbox_01"/>
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/checkbox_01" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -205,14 +213,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:onClick="@{() -> signViewModel.onServiceAgree()}">
+                        android:onClick="@{() -> signViewModel.onServiceAgree()}"
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@{signViewModel.agree1 ? @drawable/checkbox_02_on : @drawable/checkbox_02}"
                             tools:src="@drawable/checkbox_02"
-                            android:layout_marginTop="18dp"/>
+                            android:layout_marginTop="18dp"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -225,11 +235,12 @@
                         android:id="@+id/agree1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginStart="15dp"
                         android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
-                        android:src="@drawable/sample_icon" />
+                        android:src="@drawable/sample_icon"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -242,14 +253,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:onClick="@{() -> signViewModel.onPrivacyAgree()}">
+                        android:onClick="@{() -> signViewModel.onPrivacyAgree()}"
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@{signViewModel.agree2 ? @drawable/checkbox_02_on : @drawable/checkbox_02}"
                             tools:src="@drawable/checkbox_02"
-                            android:layout_marginTop="18dp"/>
+                            android:layout_marginTop="18dp"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -262,11 +275,12 @@
                         android:id="@+id/agree2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginStart="15dp"
                         android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
-                        android:src="@drawable/sample_icon" />
+                        android:src="@drawable/sample_icon"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -279,14 +293,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:onClick="@{() -> signViewModel.onAdultConsentAgree()}">
+                        android:onClick="@{() -> signViewModel.onAdultConsentAgree()}"
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@{signViewModel.agree3 ? @drawable/checkbox_02_on : @drawable/checkbox_02}"
                             tools:src="@drawable/checkbox_02"
-                            android:layout_marginTop="18dp"/>
+                            android:layout_marginTop="18dp"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -299,11 +315,12 @@
                         android:id="@+id/agree3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginStart="15dp"
                         android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
-                        android:src="@drawable/sample_icon" />
+                        android:src="@drawable/sample_icon"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -316,14 +333,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:onClick="@{() -> signViewModel.onFreeHeartAgreement()}">
+                        android:onClick="@{() -> signViewModel.onFreeHeartAgreement()}"
+                        tools:ignore="RelativeOverlap,UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@{signViewModel.agree4 ? @drawable/checkbox_02_on : @drawable/checkbox_02}"
                             tools:src="@drawable/checkbox_02"
-                            android:layout_marginTop="18dp"/>
+                            android:layout_marginTop="18dp"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -336,11 +355,12 @@
                         android:id="@+id/agree4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="16dp"
                         android:layout_marginStart="15dp"
                         android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
-                        android:src="@drawable/sample_icon" />
+                        android:src="@drawable/sample_icon"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
             </LinearLayout>
 

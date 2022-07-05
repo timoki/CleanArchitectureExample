@@ -1,5 +1,6 @@
 package com.example.cleanarchitectureexample.di
 
+import com.example.data.db.database.LiveDatabase
 import com.example.data.repository.config.ConfigRepositoryImpl
 import com.example.data.repository.datasource.LocalDataSource
 import com.example.data.repository.member.MemberRepositoryImpl
@@ -34,6 +35,7 @@ object RepositoryModule {
     @Provides
     fun provideLiveRepository(
         remoteDataSource: RemoteDataSource,
-        localDataSource: LocalDataSource
-    ): LiveRepository = LiveRepositoryImpl(remoteDataSource, localDataSource)
+        localDataSource: LocalDataSource,
+        liveDatabase: LiveDatabase
+    ): LiveRepository = LiveRepositoryImpl(remoteDataSource, localDataSource, liveDatabase)
 }

@@ -1,16 +1,16 @@
-package com.example.data.db.dao
+package com.example.data.db.dao.live
 
+import androidx.paging.PagingSource
 import androidx.room.*
-import com.example.data.db.entity.config.ConfigDataEntity
 import com.example.data.db.entity.live.LiveListEntity
 
 @Dao
 interface LiveDataDao {
     @Query("SELECT * FROM liveData")
-    suspend fun getLiveDataAll(): List<LiveListEntity>
+    fun getLiveDataAll(): PagingSource<Int, LiveListEntity>
 
     @Query("SELECT * FROM liveData WHERE id = :idValue")
-    suspend fun getLiveDataFromId(idValue: Int): LiveListEntity
+    fun getLiveDataFromId(idValue: Int): LiveListEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLiveData(liveData: List<LiveListEntity>)

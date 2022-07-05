@@ -2,12 +2,6 @@ package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
 import com.example.data.db.entity.live.LiveListEntity
-import com.example.data.mapper.ObjectMapper.toConfigDataModel
-import com.example.data.mapper.ObjectMapper.toDeviceInfo
-import com.example.data.mapper.ObjectMapper.toLiveListEntity
-import com.example.data.mapper.ObjectMapper.toModel
-import com.example.data.mapper.ObjectMapper.toSiteMode
-import com.example.data.mapper.ObjectMapper.toUserInfo
 import com.example.data.model.config.*
 import com.example.data.model.defaultData.DefaultData
 import com.example.data.model.defaultData.ErrorData
@@ -31,12 +25,10 @@ object ObjectMapper {
     fun ConfigDataEntity.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
         message = this.message,
         result = this.result,
-        idx = this.idx,
         appMutex = this.appMutex,
         broadcast = this.broadcast,
         ivsAutoMaxQuality = this.ivsAutoMaxQuality,
         ivsStartQuality = this.ivsStartQuality,
-        userIp = this.userIp,
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelListFromEntity(),
         banner = this.banner.toModel(),
@@ -47,12 +39,10 @@ object ObjectMapper {
     fun ConfigData.toConfigDataModel(): ConfigDataModel = ConfigDataModel(
         message = this.message,
         result = this.result,
-        idx = this.idx,
         appMutex = this.appMutex,
         broadcast = this.broadcast,
         ivsAutoMaxQuality = this.ivsAutoMaxQuality,
         ivsStartQuality = this.ivsStartQuality,
-        userIp = this.userIp,
         adultCheck = this.adultCheck.toModel(),
         categoryNew = this.categoryNew.toCategoryNewModelList(),
         banner = this.banner.toModel(),
@@ -64,12 +54,10 @@ object ObjectMapper {
         id = 1,
         message = this.message,
         result = this.result,
-        idx = this.idx,
         appMutex = this.appMutex,
         broadcast = this.broadcast,
         ivsAutoMaxQuality = this.ivsAutoMaxQuality,
         ivsStartQuality = this.ivsStartQuality,
-        userIp = this.userIp,
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityList(),
         banner = this.banner.toEntity(),
@@ -81,12 +69,10 @@ object ObjectMapper {
         id = 1,
         message = this.message,
         result = this.result,
-        idx = this.idx,
         appMutex = this.appMutex,
         broadcast = this.broadcast,
         ivsAutoMaxQuality = this.ivsAutoMaxQuality,
         ivsStartQuality = this.ivsStartQuality,
-        userIp = this.userIp,
         adultCheck = this.adultCheck.toEntity(),
         categoryNew = this.categoryNew.toCategoryNewEntityListFromModel(),
         banner = this.banner.toEntity(),
@@ -475,15 +461,6 @@ object ObjectMapper {
     /**
      * Member 시작
      * */
-    fun DefaultDataModel.toDefaultData(): DefaultData = DefaultData(
-        result = this.result,
-        message = this.message,
-        errorData = this.errorData?.toErrorData()
-    )
-
-    private fun ErrorDataModel.toErrorData(): ErrorData = ErrorData(
-        code = this.code
-    )
 
     fun DefaultData.toDefaultDataModel(): DefaultDataModel = DefaultDataModel(
         result = this.result,
@@ -495,41 +472,19 @@ object ObjectMapper {
         code = this.code
     )
 
-    fun LoginDataModel.toLoginData(): LoginData = LoginData(
-        result = this.result,
-        loginInfo = this.loginInfo?.toLoginInfo(),
-        needPwChange = this.needPwChange,
-        message = this.message,
-        errorData = this.errorData?.toErrorData(),
-        userIp = this.userIp
-    )
-
     fun LoginData.toLoginDataModel(): LoginDataModel = LoginDataModel(
         result = this.result,
-        loginInfo = this.loginInfo?.toLoginInfoModel(),
+        loginInfo = this.loginInfo.toLoginInfoModel(),
         needPwChange = this.needPwChange,
         message = this.message,
-        errorData = this.errorData?.toErrorDataModel(),
-        userIp = this.userIp
-    )
-
-    private fun LoginInfoModel.toLoginInfo(): LoginInfo = LoginInfo(
-        deviceInfo = this.deviceInfo?.toDeviceInfo(),
-        sessionKey = this.sessionKey,
-        siteMode = this.siteMode?.toSiteMode(),
-        userInfo = this.userInfo?.toUserInfo()
+        errorData = this.errorData?.toErrorDataModel()
     )
 
     private fun LoginInfo.toLoginInfoModel(): LoginInfoModel = LoginInfoModel(
-        deviceInfo = this.deviceInfo?.toDeviceInfoModel(),
+        deviceInfo = this.deviceInfo.toDeviceInfoModel(),
         sessionKey = this.sessionKey,
-        siteMode = this.siteMode?.toSiteModeModel(),
-        userInfo = this.userInfo?.toUserInfoModel()
-    )
-
-    private fun DeviceInfoModel.toDeviceInfo(): DeviceInfo = DeviceInfo(
-        type = this.type,
-        version = this.version
+        siteMode = this.siteMode.toSiteModeModel(),
+        userInfo = this.userInfo.toUserInfoModel()
     )
 
     private fun DeviceInfo.toDeviceInfoModel(): DeviceInfoModel = DeviceInfoModel(
@@ -537,40 +492,10 @@ object ObjectMapper {
         version = this.version
     )
 
-    private fun SiteModeModel.toSiteMode(): SiteMode = SiteMode(
-        mode = this.mode,
-        needAuth = this.needAuth,
-        type = this.type
-    )
-
     private fun SiteMode.toSiteModeModel(): SiteModeModel = SiteModeModel(
         mode = this.mode,
         needAuth = this.needAuth,
         type = this.type
-    )
-
-    private fun UserInfoModel.toUserInfo(): UserInfo = UserInfo(
-        agreeSmsYN = this.agreeSmsYN,
-        authYN = this.authYN,
-        bjRank = this.bjRank,
-        channelDesc = this.channelDesc,
-        channelTitle = this.channelTitle,
-        chatYN = this.chatYN,
-        coinHave = this.coinHave,
-        coinUse = this.coinUse,
-        id = this.id,
-        idx = this.idx,
-        imgProfile = this.imgProfile,
-        imgProfileYN = this.imgProfileYN,
-        isAdult = this.isAdult,
-        isBJ = this.isBJ,
-        isLogin = this.isLogin,
-        nick = this.nick,
-        postCountReadN = this.postCountReadN,
-        postYN = this.postYN,
-        purchaseUser = this.purchaseUser,
-        recomYN = this.recomYN,
-        socialYN = this.socialYN
     )
 
     private fun UserInfo.toUserInfoModel(): UserInfoModel = UserInfoModel(
@@ -604,47 +529,6 @@ object ObjectMapper {
     /**
      * Live 시작
      * */
-
-    fun List<LiveListModel>.toLiveListEntityFromModel(): List<LiveListEntity> = map {
-        it.toLiveListEntity()
-    }
-
-    private fun LiveListModel.toLiveListEntity(): LiveListEntity = LiveListEntity(
-        id = 0,
-        bookmarkCnt = this.bookmarkCnt,
-        browser = this.browser,
-        category = this.category,
-        code = this.code,
-        endTime = this.endTime,
-        fanCnt = this.fanCnt,
-        heart = this.heart,
-        isAdult = this.isAdult,
-        isGuestLive = this.isGuestLive,
-        isLive = this.isLive,
-        isPw = this.isPw,
-        ivsThumbnail = this.ivsThumbnail,
-        likeCnt = this.likeCnt,
-        listDeco = this.listDeco,
-        listUp = this.listUp,
-        liveType = this.liveType,
-        playCnt = this.playCnt,
-        sizeHeight = this.sizeHeight,
-        sizeWidth = this.sizeWidth,
-        startTime = this.startTime,
-        storage = this.storage,
-        thumbUrl = this.thumbUrl,
-        thumbUrlOrigin = this.thumbUrlOrigin,
-        title = this.title,
-        totalScoreCnt = this.totalScoreCnt,
-        type = this.type,
-        user = this.user,
-        userId = this.userId,
-        userIdx = this.userIdx,
-        userImg = this.userImg,
-        userLimit = this.userLimit,
-        userNick = this.userNick,
-        userUp = this.userUp,
-    )
 
     fun List<LiveList>.toLiveListEntityFromList(): List<LiveListEntity> = map {
         it.toLiveListEntity()
@@ -687,11 +571,7 @@ object ObjectMapper {
         userUp = this.userUp,
     )
 
-    fun List<LiveListEntity>.toLiveListModelFromEntity(): List<LiveListModel> = map {
-        it.toLiveListModel()
-    }
-
-    private fun LiveListEntity.toLiveListModel(): LiveListModel = LiveListModel(
+    fun LiveListEntity.toModel(): LiveListModel = LiveListModel(
         bookmarkCnt = this.bookmarkCnt,
         browser = this.browser,
         category = this.category,
@@ -724,47 +604,7 @@ object ObjectMapper {
         userImg = this.userImg,
         userLimit = this.userLimit,
         userNick = this.userNick,
-        userUp = this.userUp,
-    )
-
-    fun List<LiveList>.toLiveListModelFromList(): List<LiveListModel> = map {
-        it.toLiveListModel()
-    }
-
-    private fun LiveList.toLiveListModel(): LiveListModel = LiveListModel(
-        bookmarkCnt = this.bookmarkCnt,
-        browser = this.browser,
-        category = this.category,
-        code = this.code,
-        endTime = this.endTime,
-        fanCnt = this.fanCnt,
-        heart = this.heart,
-        isAdult = this.isAdult,
-        isGuestLive = this.isGuestLive,
-        isLive = this.isLive,
-        isPw = this.isPw,
-        ivsThumbnail = this.ivsThumbnail,
-        likeCnt = this.likeCnt,
-        listDeco = this.listDeco,
-        listUp = this.listUp,
-        liveType = this.liveType,
-        playCnt = this.playCnt,
-        sizeHeight = this.sizeHeight,
-        sizeWidth = this.sizeWidth,
-        startTime = this.startTime,
-        storage = this.storage,
-        thumbUrl = this.thumbUrl,
-        thumbUrlOrigin = this.thumbUrlOrigin,
-        title = this.title,
-        totalScoreCnt = this.totalScoreCnt,
-        type = this.type,
-        user = this.user,
-        userId = this.userId,
-        userIdx = this.userIdx,
-        userImg = this.userImg,
-        userLimit = this.userLimit,
-        userNick = this.userNick,
-        userUp = this.userUp,
+        userUp = this.userUp
     )
 
     /**

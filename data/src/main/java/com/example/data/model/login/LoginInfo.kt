@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class LoginInfo(
     @SerializedName("deviceInfo")
-    val deviceInfo: DeviceInfo?,
+    val deviceInfo: DeviceInfo,
     @SerializedName("sessKey")
-    val sessionKey: String?,
+    val sessionKey: String,
     @SerializedName("siteMode")
-    val siteMode: SiteMode?,
+    val siteMode: SiteMode,
     @SerializedName("userInfo")
-    val userInfo: UserInfo?
+    val userInfo: UserInfo
 )

@@ -12,10 +12,23 @@ import com.example.cleanarchitectureexample.utils.JoinHelperTypes
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
-@BindingAdapter("font")
-fun TextView.font(type: FontsTypes) {
+@BindingAdapter("setTypeFace")
+fun TextView.setTypeFace(type: FontsTypes = FontsTypes.REGULAR) {
     typeface = ResourcesCompat.getFont(context, type.fontRes)
 }
+
+/*@BindingAdapter(value = ["setTypeFace", "font"], requireAll = false)
+fun setTypeFace(view: TextView, style: Int, @FontRes resId: Int = R.font.noto_sans_cjk_kr_regular) {
+    view.setTypeface(
+        ResourcesCompat.getFont(
+            view.context, if (resId == 0) {
+                R.font.noto_sans_cjk_kr_regular
+            } else {
+                resId
+            }
+        ), style
+    )
+}*/
 
 @BindingAdapter("helperText")
 fun TextInputLayout.helperText(type: JoinHelperTypes) {

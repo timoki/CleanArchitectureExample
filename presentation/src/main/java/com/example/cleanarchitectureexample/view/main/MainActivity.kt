@@ -60,6 +60,9 @@ class MainActivity : AppCompatActivity() {
         mBinding.lifecycleOwner = this
         setContentView(mBinding.root)
 
+        // TODO: 아답터 생성
+        mBinding.list.adapter = adapter
+
         if (!checkPermission(permissions)) {
             permissionResultLauncher.launch(permissions)
         }
@@ -68,9 +71,19 @@ class MainActivity : AppCompatActivity() {
             viewModel.getConfig()
         }
 
-        initViewModelCallback()
+        viewModel.requestGetLive.observeOnLifecycle(this@MainActivity) { data ->
+            if (viewModel.isLogin.value == null) return@observeOnLifecycle
 
-        mBinding.list.adapter = adapter
+            data?.let {
+                adapter.submitData(data)
+            }
+        }
+
+        adapter.loadStateFlow.observeOnLifecycle(this@MainActivity) {
+
+        }
+
+        initViewModelCallback()
     }
 
     private fun initViewModelCallback() = with(viewModel) {
@@ -85,7 +98,7 @@ class MainActivity : AppCompatActivity() {
             if (isLogin.value == null && data == null) return@observeOnLifecycle
             Toast.makeText(
                 this@MainActivity,
-                if (data != null) "${data.loginInfo?.userInfo?.nick} 님이 로그인에 성공하였습니다."
+                if (data != null) "${data.loginInfo.userInfo.nick} 님이 로그인에 성공하였습니다."
                 else "${isLogin.value?.loginInfo?.userInfo?.nick} 님이 로그아웃 하였습니다.",
                 Toast.LENGTH_SHORT
             ).show()
@@ -103,12 +116,6 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             if (dataStore.isAutoLogin().first()) {
                 viewModel.login()
-            }
-        }
-
-        liveListData.observeOnLifecycle(this@MainActivity) { data ->
-            data?.let {
-                adapter.submitData(data)
             }
         }
     }

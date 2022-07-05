@@ -3,8 +3,10 @@ package com.example.cleanarchitectureexample
 import android.app.Application
 import android.content.ComponentCallbacks2
 import android.content.Context
+import com.example.cleanarchitectureexample.utils.TimberDebugTree
 import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 @HiltAndroidApp
 class CleanApplication : Application() {
@@ -25,6 +27,10 @@ class CleanApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this)
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+            Timber.plant(TimberDebugTree())
+        }
     }
 }

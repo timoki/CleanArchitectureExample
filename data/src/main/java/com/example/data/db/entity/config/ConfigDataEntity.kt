@@ -13,8 +13,6 @@ data class ConfigDataEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
     val id: Long = 1,
-    @ColumnInfo(name = "idx")
-    val idx: Int,
     @ColumnInfo(name = "message")
     val message: String,
     @ColumnInfo(name = "result")
@@ -27,8 +25,6 @@ data class ConfigDataEntity(
     val ivsAutoMaxQuality: Int,
     @ColumnInfo(name = "ivsStartQuality")
     val ivsStartQuality: Int,
-    @ColumnInfo(name = "userIp")
-    val userIp: String,
     @Embedded // Converters Class 에 Json 변환 방식을 적지 않으면 @Embedded 어노테이션을 써야 함, @ColumnInfo 어노테이션은 같이 쓸 수 없으며 configData Table 에 AdultCheckEntity Class 의 데이터 항목이 별도로 들어감(chatMessage, post, recom)
     val adultCheck: AdultCheckEntity,
     @ColumnInfo(name = "categoryNew") // Converters Class 에 Json 변환 방식을 입력하여 자동으로 Json(String) 으로 변환되어 들어가고 나올때 List<CategoryNewEntity> 형식으로 배출됨
@@ -46,6 +42,5 @@ data class ConfigDataEntity(
     val debug: DebugModel,,
     val newChat: NewChatModel,
     val server: ServerModel,
-    val socialLogin: SocialLoginModel,
     val socialServiceUrl: SocialServiceUrlModel,*/
 )

@@ -8,30 +8,34 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cleanarchitectureexample.databinding.ItemLiveListBinding
 import com.example.domain.model.live.LiveListModel
 
-class LiveListDataAdapter: PagingDataAdapter<LiveListModel, LiveListDataAdapter.Holder>(COMPARATOR) {
-
-    private lateinit var mBinding: ItemLiveListBinding
-
-    override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.bind(getItem(position))
-    }
+class LiveListDataAdapter :
+    PagingDataAdapter<LiveListModel, LiveListDataAdapter.Holder>(COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        mBinding = ItemLiveListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return Holder(mBinding)
+        val binding = ItemLiveListBinding.inflate(
+            LayoutInflater.from(
+                parent.context
+            ),
+            parent,
+            false
+        )
+
+        return Holder(binding)
     }
 
-    class Holder(binding: ItemLiveListBinding): RecyclerView.ViewHolder(binding.root) {
-
-        private val viewModel: LivelistAdapterViewModel = LivelistAdapterViewModel()
-
-        init {
-            binding.viewModel = viewModel
+    override fun onBindViewHolder(holder: Holder, position: Int) {
+        getItem(position)?.let {
+            holder.bind(it)
         }
-        fun bind(item: LiveListModel?) {
-            item?.let {
-                viewModel.setItem(it)
-            }
+    }
+
+    inner class Holder(
+        private val binding: ItemLiveListBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: LiveListModel) = with(binding) {
+            info = item
+            executePendingBindings()
         }
     }
 
@@ -39,17 +43,13 @@ class LiveListDataAdapter: PagingDataAdapter<LiveListModel, LiveListDataAdapter.
         private val COMPARATOR = object : DiffUtil.ItemCallback<LiveListModel>() {
             override fun areItemsTheSame(
                 oldItem: LiveListModel,
-                newItem: LiveListModel)
-                    : Boolean =
-                oldItem.code == newItem.code
-
+                newItem: LiveListModel
+            ): Boolean = oldItem.userId == newItem.userId
 
             override fun areContentsTheSame(
                 oldItem: LiveListModel,
                 newItem: LiveListModel
-            ): Boolean =
-                oldItem == newItem
-
+            ): Boolean = oldItem == newItem
         }
     }
 }

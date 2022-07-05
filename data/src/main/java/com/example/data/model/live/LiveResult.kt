@@ -12,6 +12,4 @@ data class LiveResult(
     val list: List<LiveList>,
     @SerializedName("page")
     val page: PageData,
-    @SerializedName("userIp")
-    val userIp: String,
 )

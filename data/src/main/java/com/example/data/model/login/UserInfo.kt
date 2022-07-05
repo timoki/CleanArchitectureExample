@@ -4,45 +4,45 @@ import com.google.gson.annotations.SerializedName
 
 data class UserInfo(
     @SerializedName("agreeSmsYN")
-    val agreeSmsYN: String?,
+    val agreeSmsYN: String,
     @SerializedName("authYN")
-    val authYN: String?,
+    val authYN: String,
     @SerializedName("bjRank")
-    val bjRank: Int?,
+    val bjRank: Int,
     @SerializedName("channelDesc")
-    val channelDesc: String?,
+    val channelDesc: String,
     @SerializedName("channelTitle")
-    val channelTitle: String?,
+    val channelTitle: String,
     @SerializedName("chatYN")
-    val chatYN: String?,
+    val chatYN: String,
     @SerializedName("coinHave")
-    val coinHave: Int?,
+    val coinHave: Int,
     @SerializedName("coinUse")
-    val coinUse: Int?,
+    val coinUse: Int,
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("idx")
-    val idx: Int?,
+    val idx: Int,
     @SerializedName("imgProfile")
-    val imgProfile: String?,
+    val imgProfile: String,
     @SerializedName("imgProfileYN")
-    val imgProfileYN: String?,
+    val imgProfileYN: String,
     @SerializedName("isAdult")
-    val isAdult: Boolean?,
+    val isAdult: Boolean,
     @SerializedName("isBJ")
-    val isBJ: String?,
+    val isBJ: String,
     @SerializedName("isLogin")
-    val isLogin: Boolean?,
+    val isLogin: Boolean,
     @SerializedName("nick")
-    val nick: String?,
+    val nick: String,
     @SerializedName("postCountReadN")
-    val postCountReadN: Int?,
+    val postCountReadN: Int,
     @SerializedName("postYN")
-    val postYN: String?,
+    val postYN: String,
     @SerializedName("purchaseUser")
-    val purchaseUser: String?,
+    val purchaseUser: String,
     @SerializedName("recomYN")
-    val recomYN: String?,
+    val recomYN: String,
     @SerializedName("socialYN")
-    val socialYN: String?
+    val socialYN: String
 )

@@ -16,6 +16,9 @@ android {
 }
 
 dependencies {
+
+    def paging_version = "3.1.1"
+
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
@@ -31,5 +34,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3"
 
-    implementation "androidx.paging:paging-compose:1.0.0-alpha09"
+    // Paging3
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    testImplementation "androidx.paging:paging-common:$paging_version"
 }

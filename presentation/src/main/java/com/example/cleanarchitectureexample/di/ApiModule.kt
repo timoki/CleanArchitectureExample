@@ -60,7 +60,7 @@ object ApiModule {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
             } else {
-                HttpLoggingInterceptor.Level.BODY
+                HttpLoggingInterceptor.Level.NONE
             }
         }
 }
