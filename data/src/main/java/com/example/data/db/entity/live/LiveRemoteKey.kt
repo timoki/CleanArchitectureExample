@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "liveRemoteKeys")
 data class LiveRemoteKey(
     @PrimaryKey
-    val liveId: Long,
+    val keyId: Int,
+    val liveId: String,
     val prevKey: Int?,
     val nextKey: Int?
 )

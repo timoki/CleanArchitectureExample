@@ -55,6 +55,8 @@ data class LiveList(
     val totalScoreCnt: Int,
     @SerializedName("type")
     val type: String,
+    @SerializedName("fanLevel")
+    val fanLevel: Int,
     @SerializedName("user")
     val user: Int,
     @SerializedName("userId")

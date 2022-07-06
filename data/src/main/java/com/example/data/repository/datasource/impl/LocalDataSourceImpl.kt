@@ -40,12 +40,15 @@ class LocalDataSourceImpl @Inject constructor(
         liveDataDao.deleteLiveDataAll()
     }
 
-    override suspend fun insertLiveKeysAll(remoteKey: List<LiveRemoteKey>) {
-        liveRemoteKeysDao.insertLiveKeysAll(remoteKey)
+    override suspend fun insertLiveKeys(remoteKey: LiveRemoteKey) {
+        liveRemoteKeysDao.insertLiveKeys(remoteKey)
     }
 
-    override suspend fun remoteKeysLiveId(liveId: Long): LiveRemoteKey? =
-        liveRemoteKeysDao.remoteKeysLiveId(liveId)
+    override suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey? =
+        liveRemoteKeysDao.remoteKeysWhereKeyId(keyId)
+
+    override suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey? =
+        liveRemoteKeysDao.remoteKeysWhereLiveId(liveId)
 
     override suspend fun clearRemoteKeys() {
         liveRemoteKeysDao.clearRemoteKeys()

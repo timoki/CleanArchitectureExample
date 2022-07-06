@@ -9,10 +9,7 @@ import javax.inject.Inject
 class RequestGetLiveRemoteUseCase @Inject constructor(
     private val repository: LiveRepository
 ) {
-    operator fun invoke(
-        limit: Int,
-        orderBy: String
-    ): Flow<PagingData<LiveListModel>> {
-        return repository.getLiveData(limit, orderBy)
+    operator fun invoke(): Flow<PagingData<LiveListModel>> {
+        return repository.getLiveData()
     }
 }

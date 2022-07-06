@@ -1,6 +1,7 @@
 package com.example.cleanarchitectureexample.view.main
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -32,19 +33,29 @@ class MainViewModel @Inject constructor(
     private val resource: ResourceProvider
 ): ViewModel() {
 
-    val isLogin = MutableStateFlow<LoginDataModel?>(null)
+    val loginModel = MutableStateFlow<LoginDataModel?>(null)
 
     val configApp = MutableStateFlow<ConfigDataModel?>(null)
+
+    val liveListModel = MutableStateFlow<PagingData<LiveListModel>?>(null)
 
     private val _networkError = Channel<String>(Channel.CONFLATED)
     val networkError = _networkError.receiveAsFlow()
 
-    private val _isShowProgress = MutableStateFlow(false)
-    val isShowProgress: StateFlow<Boolean>
-        get() = _isShowProgress
+    val isShowProgress = MutableStateFlow(false)
 
     private val _loginClickChannel = Channel<Unit>(Channel.CONFLATED)
     val loginClickChannel = _loginClickChannel.receiveAsFlow()
+
+    val isTopButtonVisible = MutableStateFlow(false)
+
+    private val _selectFilterTypePosition = MutableStateFlow(1)
+    val selectFilterTypePosition
+        get() = _selectFilterTypePosition.asStateFlow()
+
+    private val _filterType = MutableStateFlow(SORTING_NEW)
+    val filterType
+        get() = _filterType.asStateFlow()
 
     private fun requestGetConfig() = getConfigUseCase()
         .stateIn( // Flow 를 StateFlow 로 변환하는 작업
@@ -57,11 +68,11 @@ class MainViewModel @Inject constructor(
         requestGetConfig().collectLatest { type ->
             when(type) {
                 is Result.Loading -> {
-                    _isShowProgress.value = true
+                    isShowProgress.value = true
                 }
 
                 is Result.Success -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     if (type.data?.result == true) {
                         Log.d(TAG, "${type.data}")
 
@@ -70,7 +81,7 @@ class MainViewModel @Inject constructor(
                 }
 
                 is Result.NetworkError -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     type.message?.let {
                         Log.e(TAG, it)
                         _networkError.send(it)
@@ -78,7 +89,7 @@ class MainViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     type.message?.let {
                         Log.e(TAG, it)
                         _networkError.send(it)
@@ -103,13 +114,13 @@ class MainViewModel @Inject constructor(
         requestLogout().collectLatest { type ->
             when(type) {
                 is Result.Loading -> {
-                    _isShowProgress.value = true
+                    isShowProgress.value = true
                 }
 
                 is Result.Success -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     if (type.data?.result == true) {
-                        changeLoginState(null)
+                        loginModel.value = null
                         if (!dataStore.isMemoryId().first()) {
                             dataStore.saveId("")
                         }
@@ -120,7 +131,7 @@ class MainViewModel @Inject constructor(
                 }
 
                 is Result.NetworkError -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     type.message?.let {
                         Log.e(TAG, it)
                         _networkError.send(it)
@@ -128,7 +139,7 @@ class MainViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    _isShowProgress.value = false
+                    isShowProgress.value = false
                     type.message?.let {
                         Log.e(TAG, it)
                         _networkError.send(it)
@@ -145,28 +156,28 @@ class MainViewModel @Inject constructor(
             requestLogin(id, pw).collect { type ->
                 when (type) {
                     is Result.Loading -> {
-                        _isShowProgress.value = true
+                        isShowProgress.value = true
                     }
 
                     is Result.Success -> {
-                        _isShowProgress.value = false
+                        isShowProgress.value = false
 
                         if (type.data?.result == true) {
-                            changeLoginState(type.data)
+                            loginModel.value = type.data
                         } else {
                             _networkError.send(resource.getString(R.string.warning_auto_login))
                         }
                     }
 
                     is Result.NetworkError -> {
-                        _isShowProgress.value = false
+                        isShowProgress.value = false
                         type.message?.let {
                             _networkError.send(it)
                         }
                     }
 
                     is Result.Error -> {
-                        _isShowProgress.value = false
+                        isShowProgress.value = false
                         type.message?.let {
                             _networkError.send(it)
                         }
@@ -176,11 +187,10 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    val requestGetLive: Flow<PagingData<LiveListModel>?> =
-        requestGetLiveRemoteUseCase(20, "startDateTime").cachedIn(scope = viewModelScope)
-
-    fun changeLoginState(data: LoginDataModel?) = viewModelScope.launch {
-        isLogin.value = data
+    fun getAllLive() = viewModelScope.launch {
+        requestGetLiveRemoteUseCase().cachedIn(scope = viewModelScope).collect {
+            liveListModel.value = it
+        }
     }
 
     //로그인 처리
@@ -192,7 +202,31 @@ class MainViewModel @Inject constructor(
                 initialValue = Result.Loading()
             )
 
+    fun filterClick(view: View) {
+        val filterType: String
+        when (view.id) {
+            R.id.sortingBest -> {
+                filterType = SORTING_BEST
+                _selectFilterTypePosition.value = 0
+            }
+            R.id.sortingNew -> {
+                filterType = SORTING_NEW
+                _selectFilterTypePosition.value = 1
+            }
+            R.id.sortingView -> {
+                filterType = SORTING_VIEW
+                _selectFilterTypePosition.value = 2
+            }
+            else -> filterType = SORTING_NEW
+        }
+
+        _filterType.value = filterType
+    }
+
     companion object {
         private const val TAG = "MainViewModel"
+        private const val SORTING_BEST = "scoreLiveRecomWeek"
+        private const val SORTING_NEW = "startDateTime"
+        private const val SORTING_VIEW = "userCnt"
     }
 }

@@ -5,8 +5,5 @@ import com.example.domain.model.live.LiveListModel
 import kotlinx.coroutines.flow.Flow
 
 interface LiveRepository {
-    fun getLiveData(
-        limit: Int,
-        orderBy: String
-    ): Flow<PagingData<LiveListModel>>
+    fun getLiveData(): Flow<PagingData<LiveListModel>>
 }

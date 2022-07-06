@@ -25,6 +25,8 @@ class DataStoreModule(
 
     private val autoLoginKey = booleanPreferencesKey("autoLogin")
 
+    private val liveListFilterKey = stringPreferencesKey("liveListFilter")
+
     suspend fun saveId(id: String?) = with(context.dataStore) {
         val saveId = getSaveId().first()
         if (saveId != id) {
@@ -57,6 +59,15 @@ class DataStoreModule(
         if (memoryId != b) {
             edit { edit ->
                 edit[loginIdSaveKey] = b
+            }
+        }
+    }
+
+    suspend fun saveLiveListFilter(filter: String?) = with(context.dataStore) {
+        val type = getLiveListFilter().first()
+        if (type != filter) {
+            edit { edit ->
+                edit[liveListFilterKey] = filter ?: ""
             }
         }
     }
@@ -106,6 +117,18 @@ class DataStoreModule(
             }
         }.map { pref ->
             pref[autoLoginKey] ?: false
+        }
+    }
+
+    fun getLiveListFilter(): Flow<String> = with(context.dataStore) {
+        data.catch { e ->
+            if (e is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw e
+            }
+        }.map { pref ->
+            pref[liveListFilterKey] ?: ""
         }
     }
 }

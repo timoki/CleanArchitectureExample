@@ -9,10 +9,13 @@ import com.example.data.db.entity.live.LiveRemoteKey
 @Dao
 interface LiveRemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertLiveKeysAll(remoteKey: List<LiveRemoteKey>)
+    suspend fun insertLiveKeys(remoteKey: LiveRemoteKey)
+
+    @Query("SELECT * FROM liveRemoteKeys WHERE keyId = :keyId")
+    suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey?
 
     @Query("SELECT * FROM liveRemoteKeys WHERE liveId = :liveId")
-    suspend fun remoteKeysLiveId(liveId: Long): LiveRemoteKey?
+    suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey?
 
     @Query("DELETE FROM liveRemoteKeys")
     suspend fun clearRemoteKeys()

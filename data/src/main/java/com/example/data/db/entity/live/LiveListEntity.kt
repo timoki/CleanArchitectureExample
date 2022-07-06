@@ -3,6 +3,7 @@ package com.example.data.db.entity.live
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "liveData")
 data class LiveListEntity(
@@ -61,6 +62,8 @@ data class LiveListEntity(
     val totalScoreCnt: Int,
     @ColumnInfo(name = "type")
     val type: String,
+    @ColumnInfo(name = "fanLevel")
+    val fanLevel: Int,
     @ColumnInfo(name = "user")
     val user: Int,
     @ColumnInfo(name = "userId")

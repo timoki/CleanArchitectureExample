@@ -2,6 +2,7 @@ package com.example.data.mapper
 
 import com.example.data.db.entity.config.*
 import com.example.data.db.entity.live.LiveListEntity
+import com.example.data.mapper.ObjectMapper.toModel
 import com.example.data.model.config.*
 import com.example.data.model.defaultData.DefaultData
 import com.example.data.model.defaultData.ErrorData
@@ -562,6 +563,7 @@ object ObjectMapper {
         title = this.title,
         totalScoreCnt = this.totalScoreCnt,
         type = this.type,
+        fanLevel = this.fanLevel,
         user = this.user,
         userId = this.userId,
         userIdx = this.userIdx,
@@ -598,6 +600,7 @@ object ObjectMapper {
         title = this.title,
         totalScoreCnt = this.totalScoreCnt,
         type = this.type,
+        fanLevel = this.fanLevel,
         user = this.user,
         userId = this.userId,
         userIdx = this.userIdx,
@@ -606,7 +609,6 @@ object ObjectMapper {
         userNick = this.userNick,
         userUp = this.userUp
     )
-
     /**
      * Live 끝
      * */

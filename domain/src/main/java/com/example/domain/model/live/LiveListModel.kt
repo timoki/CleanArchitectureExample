@@ -27,6 +27,7 @@ data class LiveListModel(
     val title: String,
     val totalScoreCnt: Int,
     val type: String,
+    val fanLevel: Int,
     val user: Int,
     val userId: String,
     val userIdx: Int,

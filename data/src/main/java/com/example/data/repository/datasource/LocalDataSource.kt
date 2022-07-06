@@ -1,6 +1,7 @@
 package com.example.data.repository.datasource
 
 import androidx.paging.PagingSource
+import androidx.room.Query
 import com.example.data.db.entity.config.ConfigDataEntity
 import com.example.data.db.entity.live.LiveListEntity
 import com.example.data.db.entity.live.LiveRemoteKey
@@ -25,9 +26,11 @@ interface LocalDataSource {
 
     suspend fun deleteLiveDataAll()
 
-    suspend fun insertLiveKeysAll(remoteKey: List<LiveRemoteKey>)
+    suspend fun insertLiveKeys(remoteKey: LiveRemoteKey)
 
-    suspend fun remoteKeysLiveId(liveId: Long): LiveRemoteKey?
+    suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey?
+
+    suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey?
 
     suspend fun clearRemoteKeys()
 }
