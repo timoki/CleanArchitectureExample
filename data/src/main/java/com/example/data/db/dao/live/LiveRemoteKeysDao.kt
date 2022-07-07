@@ -11,9 +11,6 @@ interface LiveRemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLiveKeys(remoteKey: LiveRemoteKey)
 
-    @Query("SELECT * FROM liveRemoteKeys WHERE keyId = :keyId")
-    suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey?
-
     @Query("SELECT * FROM liveRemoteKeys WHERE liveId = :liveId")
     suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey?
 

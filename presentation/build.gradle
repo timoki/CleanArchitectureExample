@@ -112,17 +112,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.3"
 
-    implementation "androidx.paging:paging-runtime:$paging_version"
-
-    // alternatively - without Android dependencies for tests
-    testImplementation "androidx.paging:paging-common:$paging_version"
-
-    // optional - Guava ListenableFuture support
-    implementation "androidx.paging:paging-guava:$paging_version"
-
-    // optional - Jetpack Compose integration
-    implementation "androidx.paging:paging-compose:1.0.0-alpha09"
-
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'

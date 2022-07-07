@@ -28,8 +28,6 @@ interface LocalDataSource {
 
     suspend fun insertLiveKeys(remoteKey: LiveRemoteKey)
 
-    suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey?
-
     suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey?
 
     suspend fun clearRemoteKeys()

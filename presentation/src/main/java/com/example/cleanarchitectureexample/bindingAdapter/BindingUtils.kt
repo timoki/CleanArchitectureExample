@@ -1,5 +1,6 @@
 package com.example.cleanarchitectureexample.bindingAdapter
 
+import android.graphics.drawable.Drawable
 import android.text.TextWatcher
 import android.widget.ImageView
 import android.widget.TextView
@@ -53,15 +54,15 @@ fun TextInputEditText.textWatcher(watcher: TextWatcher) {
 }
 
 @BindingAdapter("setUriImage")
-fun ImageView.setUriImage(uri: String) {
+fun ImageView.setUriImage(uri: String?) {
     Glide
         .with(context)
-        .load(uri)
+        .load(uri ?: R.drawable.logo)
         .into(this)
 }
 
 @BindingAdapter("setDrawableImage")
-fun ImageView.setDrawableImage(@DrawableRes drawable: Int?) {
+fun ImageView.setDrawableImage(@DrawableRes drawable: Drawable) {
     Glide
         .with(context)
         .load(drawable)
@@ -94,16 +95,20 @@ fun setFanLevel(view: ImageView, level: Int?) {
 }
 
 @BindingAdapter("formatStartTime")
-fun formatStartTime(view: TextView, startTime: String) {
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    val startCal = Calendar.getInstance()
-    val cal = Calendar.getInstance()
-    startCal.time = sdf.parse(startTime)
+fun formatStartTime(view: TextView, startTime: String?) {
+    if (startTime.isNullOrEmpty()) {
+        view.text = ""
+    } else {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val startCal = Calendar.getInstance()
+        val cal = Calendar.getInstance()
+        startCal.time = sdf.parse(startTime)
 
-    val diffTime = cal.timeInMillis - startCal.timeInMillis
+        val diffTime = cal.timeInMillis - startCal.timeInMillis
 
-    val hour = (diffTime / 1000) / 60 / 60
-    val min = ((diffTime - (hour * 60 * 60 * 1000)) / 1000) / 60
-    val sec = ((diffTime - (hour * 60 * 60 * 1000) - (min * 60 * 1000)) / 1000)
-    view.text = "$hour:$min:$sec"
+        val hour = (diffTime / 1000) / 60 / 60
+        val min = ((diffTime - (hour * 60 * 60 * 1000)) / 1000) / 60
+        val sec = ((diffTime - (hour * 60 * 60 * 1000) - (min * 60 * 1000)) / 1000)
+        view.text = "$hour:$min:$sec"
+    }
 }

@@ -1,18 +1,17 @@
 package com.example.data.repository.datasource
 
-import android.annotation.SuppressLint
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
-import com.example.data.db.database.DataStoreModule
 import com.example.data.db.database.LiveDatabase
 import com.example.data.db.entity.live.LiveListEntity
 import com.example.data.db.entity.live.LiveRemoteKey
 import com.example.data.mapper.ObjectMapper.toLiveListEntityFromList
+import com.example.domain.model.live.LiveFilterType
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
@@ -29,10 +28,10 @@ class LiveRemoteMediator @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource,
     private val database: LiveDatabase,
-    private val dataStore: DataStoreModule
+    private val sorting: StateFlow<LiveFilterType.Sorting>,
+    private val adultType: StateFlow<LiveFilterType.AdultFilter>
 ) : RemoteMediator<Int, LiveListEntity>() {
 
-    @SuppressLint("NewApi")
     override suspend fun initialize(): InitializeAction {
         return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
@@ -54,24 +53,38 @@ class LiveRemoteMediator @Inject constructor(
                     remoteKeys?.nextKey?.minus(1) ?: 0*/
                     0
                 }
+
+                /**
+                 * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
+                 * prevKey 를 구하여 진행하면 상단 아이템으로 스크롤 시 이전 페이지 정보를 가져옵니다.
+                 */
                 LoadType.PREPEND -> {
-                    val remoteKeys = getRemoteKeyForFirstItem(state)
-                    /**
-                     * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
-                     */
+                    /*val remoteKeys = getRemoteKeyForFirstItem(state)
+
                     remoteKeys?.prevKey
-                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
+                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)*/
+                    return MediatorResult.Success(endOfPaginationReached = true)
                 }
 
+                /**
+                 * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
+                 * RemoteKeys 가 null 이 아닌 경우 Paging 이 이 메서드를 다시 호출하기 때문에
+                 * endOfPaginationReached = false 로 Success 를 반환할 수 있습니다.
+                 * remoteKeys 가 null 이 아니지만 nextKey 가 null 이면 추가를 위한 페이지 매김 끝에 도달했음을 의미합니다.
+                 */
                 LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeyForLastItem(state)
-                    /**
-                     * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
-                     * RemoteKeys 가 null 이 아닌 경우 Paging 이 이 메서드를 다시 호출하기 때문에
-                     * endOfPaginationReached = false 로 Success 를 반환할 수 있습니다.
-                     * remoteKeys 가 null 이 아니지만 nextKey 가 null 이면 추가를 위한 페이지 매김 끝에 도달했음을 의미합니다.
-                     */
+                    /*val remoteKeys = getRemoteKeyForLastItem(state)
+
                     remoteKeys?.nextKey
+                        ?: return MediatorResult.Success(endOfPaginationReached = true)*/
+                    val lastItem = state.lastItemOrNull()
+                    val remoteKey: LiveRemoteKey? = database.withTransaction {
+                        if (lastItem?.code != null) {
+                            localDataSource.remoteKeysWhereLiveId(lastItem.code)
+                        } else null
+                    }
+
+                    remoteKey?.nextKey
                         ?: return MediatorResult.Success(endOfPaginationReached = true)
                 }
             }
@@ -79,14 +92,15 @@ class LiveRemoteMediator @Inject constructor(
             // network
             val response = withContext(Dispatchers.IO) {
                 remoteDataSource.getLive(
-                    page * 20,
-                    20,
-                    dataStore.getLiveListFilter().first()
+                    page * state.config.pageSize,
+                    state.config.pageSize,
+                    sorting.value.value,
+                    adultType.value.value
                 )
             }
 
             val list = response.body()?.list ?: return MediatorResult.Error(Exception())
-            val endOfPaginationReached = list.isEmpty()
+            val endOfPaginationReached = response.body()?.page?.lastPage
 
             if (response.isSuccessful) {
                 database.withTransaction {
@@ -97,12 +111,12 @@ class LiveRemoteMediator @Inject constructor(
 
 
                     val prevKey = if (page == 0) null else page - 1
-                    val nextKey = if (endOfPaginationReached) null else page + 1
+                    val nextKey = if (endOfPaginationReached == page) null else page + 1
 
                     list.forEachIndexed { index, liveList ->
                         localDataSource.insertLiveKeys(
                             LiveRemoteKey(
-                                keyId = (page * 20) + index, // 쿼리 문으로
+                                keyId = (page * 20) + index,
                                 liveId = liveList.code,
                                 prevKey = prevKey,
                                 nextKey = nextKey
@@ -114,9 +128,8 @@ class LiveRemoteMediator @Inject constructor(
                 }
             }
 
-            MediatorResult.Success(
-                endOfPaginationReached = endOfPaginationReached
-            )
+            MediatorResult.Success(endOfPaginationReached = endOfPaginationReached == page)
+
         } catch (e: IOException) {
             MediatorResult.Error(e)
         } catch (e: HttpException) {

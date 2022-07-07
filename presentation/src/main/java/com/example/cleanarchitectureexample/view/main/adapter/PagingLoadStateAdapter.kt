@@ -1,17 +1,15 @@
 package com.example.cleanarchitectureexample.view.main.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cleanarchitectureexample.databinding.ItemLoadStateBinding
+import timber.log.Timber
 
-class PagingLoadStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
-    private val adapter: PagingDataAdapter<T, VH>,
+class PagingLoadStateAdapter(
     private val retry: () -> Unit
 ) : LoadStateAdapter<PagingLoadStateAdapter.NetworkStateItemViewHolder>() {
 
@@ -22,7 +20,7 @@ class PagingLoadStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
                 parent,
                 false
             )
-        ) { retry }
+        ) { retry.invoke() }
 
 
     override fun onBindViewHolder(holder: NetworkStateItemViewHolder, loadState: LoadState) =
@@ -39,12 +37,12 @@ class PagingLoadStateAdapter<T : Any, VH : RecyclerView.ViewHolder>(
 
         fun bind(loadState: LoadState) {
             with(binding) {
-                Log.d("아외안되", "해치웟나? -> $loadState")
+                Timber.d("해치웟나? -> $loadState")
                 progressBar.isVisible = loadState is LoadState.Loading
                 retryButton.isVisible = loadState is LoadState.Error
                 errorMsg.isVisible =
                     !(loadState as? LoadState.Error)?.error?.message.isNullOrBlank()
-                errorMsg.text = (loadState as? LoadState.Error)?.error?.message
+                errorMsg.text = "인터넷이 연결되지 않았습니다."
             }
         }
     }

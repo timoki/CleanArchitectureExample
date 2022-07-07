@@ -4,138 +4,218 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-        <import type="com.example.cleanarchitectureexample.utils.FontsTypes"/>
+
+        <import type="android.view.View" />
+
+        <import type="com.example.cleanarchitectureexample.utils.FontsTypes" />
+
+        <import type="com.example.domain.model.live.LiveFilterType" />
+
+        <import type="com.example.cleanarchitectureexample.view.main.MainViewModel.ViewState" />
 
         <variable
             name="mainViewModel"
             type="com.example.cleanarchitectureexample.view.main.MainViewModel" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refresh"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:context=".view.main.MainActivity">
 
         <RelativeLayout
+            android:id="@+id/topBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".view.main.MainActivity">
+            android:layout_height="56dp"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/logo"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_above="@+id/buttonFrame">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <LinearLayout
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="end"
-                    android:gravity="center_vertical"
-                    android:layout_marginEnd="12dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ico_19_bk"
+                    tools:ignore="ContentDescription" />
 
-                    <TextView
-                        android:id="@+id/sortingBest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sorting_best"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        android:onClick="@{(v) -> mainViewModel.filterClick(v)}"
-                        app:setTypeFace="@{mainViewModel.selectFilterTypePosition == 0 ? FontsTypes.BOLD : FontsTypes.REGULAR}"/>
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:onCheckedChanged="@{(btn, b) -> mainViewModel.isLogin() ? mainViewModel.adultSwitchCheck(b ? LiveFilterType.AdultFilter.VIEW_ADULT_LIVE : LiveFilterType.AdultFilter.HIDE_ADULT_LIVE) : mainViewModel.guestSwitchCheck(btn, b)}"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/selector_switch_track"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="12dp"
-                        android:background="@color/line_grey"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/btn_search"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/sortingNew"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sorting_new"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        android:onClick="@{(v) -> mainViewModel.filterClick(v)}"
-                        app:setTypeFace="@{mainViewModel.selectFilterTypePosition == 1 ? FontsTypes.BOLD : FontsTypes.REGULAR}"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="89dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="@{!mainViewModel.isLogin ? View.VISIBLE : (mainViewModel.viewState == ViewState.ERROR || mainViewModel.viewState == ViewState.EMPTY ? View.VISIBLE : View.GONE)}"
+            tools:visibility="visible">
 
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="12dp"
-                        android:background="@color/line_grey"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_none"
+                tools:ignore="ContentDescription" />
 
-                    <TextView
-                        android:id="@+id/sortingView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/sorting_view"
-                        android:textColor="@color/black"
-                        android:textSize="13sp"
-                        android:onClick="@{(v) -> mainViewModel.filterClick(v)}"
-                        app:setTypeFace="@{mainViewModel.selectFilterTypePosition == 2 ? FontsTypes.BOLD : FontsTypes.REGULAR}"/>
-                </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                android:gravity="center"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="6sp"
+                android:text="@{!mainViewModel.isLogin ? @string/no_login_text : (mainViewModel.viewState == ViewState.EMPTY ? @string/no_contents : @string/no_internet)}"
+                android:textColor="@color/text_dark_grey"
+                android:textSize="14sp" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/fill_main_radius_50"
+                android:fontFamily="@font/noto_sans_cjk_kr_medium"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> mainViewModel.loginClick()}"
+                android:text="@string/go_login"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="@{mainViewModel.isLogin ? View.GONE : View.VISIBLE}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/button"
+            android:layout_below="@+id/topBar"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical"
+            android:visibility="@{mainViewModel.isLogin ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/sortingBest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainViewModel.filterClick(LiveFilterType.Sorting.SORTING_BEST)}"
+                    android:text="@string/sorting_best"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:setTypeFace="@{mainViewModel.sortingType == LiveFilterType.Sorting.SORTING_BEST ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/line_grey" />
+
+                <TextView
+                    android:id="@+id/sortingNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainViewModel.filterClick(LiveFilterType.Sorting.SORTING_NEW)}"
+                    android:text="@string/sorting_new"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:setTypeFace="@{mainViewModel.sortingType == LiveFilterType.Sorting.SORTING_NEW ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="12dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@color/line_grey" />
+
+                <TextView
+                    android:id="@+id/sortingView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainViewModel.filterClick(LiveFilterType.Sorting.SORTING_VIEW)}"
+                    android:text="@string/sorting_view"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    app:setTypeFace="@{mainViewModel.sortingType == LiveFilterType.Sorting.SORTING_VIEW ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+            </LinearLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/refresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="16dp"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_live_list" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            </LinearLayout>
+        </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/buttonFrame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:onClick="@{() -> mainViewModel.isLogin ? mainViewModel.logoutClick() : mainViewModel.loginClick()}"
+            android:text="@{mainViewModel.isLogin ? @string/logout : @string/login}"
+            tools:visibility="visible" />
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{() -> mainViewModel.loginClick()}"
-                    android:text="@string/login"
-                    android:visibility="@{mainViewModel.loginModel != null ? View.GONE : View.VISIBLE}"
-                    tools:visibility="visible" />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{mainViewModel.isShowProgress()? View.VISIBLE : View.GONE, default = gone}" />
 
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/logout"
-                    android:onClick="@{() -> mainViewModel.logoutClick()}"
-                    android:visibility="@{mainViewModel.loginModel != null ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone" />
-            </RelativeLayout>
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{mainViewModel.isShowProgress()? View.VISIBLE : View.GONE, default = gone}"/>
-
-            <ImageView
-                android:id="@+id/goTopBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ico_top"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="72dp"
-                android:visibility="@{mainViewModel.isTopButtonVisible()? View.VISIBLE : View.GONE, default = gone}"
-                tools:ignore="ContentDescription" />
-        </RelativeLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        <ImageView
+            android:id="@+id/goTopBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="72dp"
+            android:src="@drawable/ico_top"
+            android:visibility="@{mainViewModel.isTopButtonVisible()? View.VISIBLE : View.GONE, default = gone}"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
 </layout>
 

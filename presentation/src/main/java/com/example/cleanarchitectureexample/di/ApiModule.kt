@@ -42,20 +42,20 @@ object ApiModule {
     @Provides
     fun provideApiService(
         retrofit: Retrofit
-    ) : ApiService = retrofit.create(ApiService::class.java)
+    ): ApiService = retrofit.create(ApiService::class.java)
 
     @Singleton
     @Provides
     fun okHttpClient(
         interceptor: HttpLoggingInterceptor
-    ) : OkHttpClient = OkHttpClient.Builder()
+    ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(interceptor)
         .addNetworkInterceptor(StethoInterceptor())
         .build()
 
     @Singleton
     @Provides
-    fun httpLoggingInterceptor() : HttpLoggingInterceptor =
+    fun httpLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY

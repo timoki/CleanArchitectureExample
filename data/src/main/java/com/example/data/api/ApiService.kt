@@ -53,6 +53,7 @@ interface ApiService {
     suspend fun getLiveList(
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
-        @Query("orderBy") orderBy: String
+        @Query("orderBy") orderBy: String,
+        @Query("adultType") adultType: String
     ): Response<LiveResult>
 }

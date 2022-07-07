@@ -43,6 +43,7 @@ interface RemoteDataSource {
     suspend fun getLive(
         offset: Int,
         limit: Int,
-        orderBy: String
+        orderBy: String,
+        adultType: String
     ) : Response<LiveResult>
 }

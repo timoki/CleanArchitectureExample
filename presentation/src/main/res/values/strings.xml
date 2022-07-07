@@ -6,6 +6,9 @@
     <string name="logout">로그아웃</string>
     <string name="retry">재시도</string>
     <string name="no_internet">인터넷이 연결되지 않았습니다.</string>
+    <string name="no_login_text">로그인 후 회원님만을 위한\n콘텐츠를 확인하세요!</string>
+    <string name="go_login">로그인하기</string>
+    <string name="no_contents">목록이 없습니다.</string>
 
     <!-- 로그인 팝업 -->
     <string name="login">로그인</string>

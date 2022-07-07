@@ -44,7 +44,7 @@ class LiveListDataAdapter :
             override fun areItemsTheSame(
                 oldItem: LiveListModel,
                 newItem: LiveListModel
-            ): Boolean = oldItem.userId == newItem.userId
+            ): Boolean = oldItem.code == newItem.code
 
             override fun areContentsTheSame(
                 oldItem: LiveListModel,

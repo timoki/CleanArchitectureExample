@@ -3,18 +3,15 @@ package com.example.cleanarchitectureexample.view.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.databinding.ActivityMainBinding
 import com.example.cleanarchitectureexample.utils.observeInLifecycle
 import com.example.cleanarchitectureexample.utils.observeOnLifecycle
@@ -24,13 +21,9 @@ import com.example.cleanarchitectureexample.view.main.adapter.PagingLoadStateAda
 import com.example.data.db.database.DataStoreModule
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -47,8 +40,12 @@ class MainActivity : AppCompatActivity() {
         LiveListDataAdapter()
     }
 
-    private val loadStateAdapter by lazy {
-        PagingLoadStateAdapter(adapter) { adapter.retry() }
+    private val header: PagingLoadStateAdapter by lazy {
+        PagingLoadStateAdapter { adapter.retry() }
+    }
+
+    private val footer: PagingLoadStateAdapter by lazy {
+        PagingLoadStateAdapter { adapter.retry() }
     }
 
     @Inject
@@ -79,47 +76,67 @@ class MainActivity : AppCompatActivity() {
         }
 
         adapter.apply {
-            mBinding.refresh.setOnRefreshListener {
-                refresh()
-            }
             mBinding.list.adapter = withLoadStateHeaderAndFooter(
-                header = loadStateAdapter,
-                footer = loadStateAdapter
+                header = header,
+                footer = footer
             )
+
+            viewModel.getAllLive.observeOnLifecycle(this@MainActivity) {
+                adapter.submitData(it)
+            }
 
             loadStateFlow.observeOnLifecycle(this@MainActivity) { loadState ->
                 mBinding.refresh.isRefreshing =
                     loadState.source.refresh is LoadState.Loading || loadState.mediator?.refresh is LoadState.Loading
 
-                loadStateAdapter.loadState = loadState.mediator
+                header.loadState = loadState.mediator
                     ?.refresh
                     ?.takeIf { it is LoadState.Error && adapter.itemCount > 0 }
                     ?: loadState.prepend
 
-                val errorState = loadState.source.append as? LoadState.Error
+                val notLoadingState = loadState.mediator?.append as? LoadState.NotLoading
+                    ?: loadState.mediator?.prepend as? LoadState.NotLoading
+                    ?: loadState.source.append as? LoadState.NotLoading
+                    ?: loadState.source.prepend as? LoadState.NotLoading
+                    ?: loadState.append as? LoadState.NotLoading
+                    ?: loadState.prepend as? LoadState.NotLoading
+
+                val loadingState = loadState.mediator?.append as? LoadState.Loading
+                    ?: loadState.mediator?.prepend as? LoadState.Loading
+                    ?: loadState.source.append as? LoadState.Loading
+                    ?: loadState.source.prepend as? LoadState.Loading
+                    ?: loadState.append as? LoadState.Loading
+                    ?: loadState.prepend as? LoadState.Loading
+
+                val errorState = loadState.mediator?.append as? LoadState.Error
+                    ?: loadState.mediator?.prepend as? LoadState.Error
+                    ?: loadState.source.append as? LoadState.Error
                     ?: loadState.source.prepend as? LoadState.Error
                     ?: loadState.append as? LoadState.Error
                     ?: loadState.prepend as? LoadState.Error
-                errorState?.let {
-                    Toast.makeText(
-                        this@MainActivity,
-                        getString(R.string.no_internet),
-                        Toast.LENGTH_LONG
-                    ).show()
+
+                when {
+                    errorState != null -> {
+                        viewModel.viewState.value =
+                            if (adapter.itemCount <= 0) MainViewModel.ViewState.ERROR
+                            else MainViewModel.ViewState.NOT_EMPTY_ERROR
+                    }
+
+                    loadingState != null -> {
+                        viewModel.viewState.value = MainViewModel.ViewState.LOADING
+                    }
+
+                    notLoadingState != null -> {
+                        viewModel.viewState.value =
+                            if (adapter.itemCount <= 0) MainViewModel.ViewState.EMPTY
+                            else MainViewModel.ViewState.VIEW
+                    }
                 }
             }
         }
 
         lifecycleScope.launch {
             viewModel.getConfig()
-        }
-
-        viewModel.liveListModel.observeOnLifecycle(this@MainActivity) { data ->
-            if (viewModel.loginModel.value == null) return@observeOnLifecycle
-
-            data?.let {
-                adapter.submitData(data)
-            }
         }
 
         initListener()
@@ -138,38 +155,39 @@ class MainActivity : AppCompatActivity() {
                 viewModel.isTopButtonVisible.value = position >= 3
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-
-            }
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {}
         })
+
+        mBinding.refresh.setOnRefreshListener {
+            if (mBinding.refresh.isRefreshing) {
+                mBinding.refresh.isRefreshing = false
+            }
+
+            adapter.refresh()
+        }
     }
 
     private fun initViewModelCallback() = with(viewModel) {
-        lifecycleScope.launch {
-            networkError.collectLatest {
-                Toast.makeText(this@MainActivity, it, Toast.LENGTH_LONG).show()
-                return@collectLatest
-            }
+        loginModel.observeOnLifecycle(this@MainActivity) { type ->
+            isLogin.value = type is MainViewModel.LoginState.Ok
         }
 
-        loginModel.observeOnLifecycle(this@MainActivity) { data ->
-            if (loginModel.value == null && data == null) return@observeOnLifecycle
+        networkState.onEach {
             Toast.makeText(
                 this@MainActivity,
-                if (data != null) "${data.loginInfo.userInfo.nick} 님이 로그인에 성공하였습니다."
-                else "${loginModel.value?.loginInfo?.userInfo?.nick} 님이 로그아웃 하였습니다.",
-                Toast.LENGTH_SHORT
+                it.second,
+                Toast.LENGTH_LONG
             ).show()
-            if (loginModel.value != null) {
-                getAllLive()
-            }
-        }
+
+            return@onEach
+        }.observeInLifecycle(this@MainActivity)
 
         loginClickChannel.onEach {
             SignDialogFragment.newInstance().apply {
                 dialog?.setOnDismissListener {
                     supportFragmentManager.beginTransaction().remove(this)
                 }
+
                 show(supportFragmentManager, "SignDialog")
             }
         }.observeInLifecycle(this@MainActivity)
@@ -180,8 +198,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        filterType.observeOnLifecycle(this@MainActivity) {
-            dataStore.saveLiveListFilter(it)
+        sortingType.observeOnLifecycle(this@MainActivity) {
+            mBinding.list.scrollToPosition(0)
+            adapter.refresh()
+        }
+
+        adultType.observeOnLifecycle(this@MainActivity) {
             mBinding.list.scrollToPosition(0)
             adapter.refresh()
         }

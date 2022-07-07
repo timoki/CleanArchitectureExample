@@ -37,7 +37,6 @@ object RepositoryModule {
     fun provideLiveRepository(
         remoteDataSource: RemoteDataSource,
         localDataSource: LocalDataSource,
-        liveDatabase: LiveDatabase,
-        dataStore: DataStoreModule
-    ): LiveRepository = LiveRepositoryImpl(remoteDataSource, localDataSource, liveDatabase, dataStore)
+        liveDatabase: LiveDatabase
+    ): LiveRepository = LiveRepositoryImpl(remoteDataSource, localDataSource, liveDatabase)
 }

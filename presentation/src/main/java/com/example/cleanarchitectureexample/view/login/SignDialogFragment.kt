@@ -69,8 +69,17 @@ class SignDialogFragment : DialogFragment() {
             }
         }
 
-        loginSuccess.onEach {
-            mainViewModel.loginModel.value = it
+        loginSuccess.onEach { model ->
+            model?.let {
+                mainViewModel.loginModel.value = MainViewModel.LoginState.Ok(it)
+
+                Toast.makeText(
+                    requireContext(),
+                    "${model.loginInfo.userInfo.nick} 님이 로그인에 성공하였습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
             dismiss()
         }.observeInLifecycle(viewLifecycleOwner)
 

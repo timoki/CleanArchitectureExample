@@ -44,9 +44,6 @@ class LocalDataSourceImpl @Inject constructor(
         liveRemoteKeysDao.insertLiveKeys(remoteKey)
     }
 
-    override suspend fun remoteKeysWhereKeyId(keyId: Int): LiveRemoteKey? =
-        liveRemoteKeysDao.remoteKeysWhereKeyId(keyId)
-
     override suspend fun remoteKeysWhereLiveId(liveId: String): LiveRemoteKey? =
         liveRemoteKeysDao.remoteKeysWhereLiveId(liveId)
 
