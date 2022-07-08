@@ -54,6 +54,14 @@ interface ApiService {
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
         @Query("orderBy") orderBy: String,
-        @Query("adultType") adultType: String
+        @Query("adultShowYN") adultType: String
+    ): Response<LiveResult>
+
+    /** Search */
+    @GET("$LIVE/index")
+    suspend fun getLiveSearchList(
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,
+        @Query("searchVal") searchText: String
     ): Response<LiveResult>
 }

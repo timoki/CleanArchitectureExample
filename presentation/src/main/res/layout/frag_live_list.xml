@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <data>
+        <import type="android.view.View" />
+
+        <import type="com.example.domain.model.live.LiveFilterType" />
+
+        <import type="com.example.cleanarchitectureexample.utils.FontsTypes" />
+
+        <import type="com.example.cleanarchitectureexample.view.live.LiveListViewModel.ViewState" />
+
+        <variable
+            name="vm"
+            type="com.example.cleanarchitectureexample.view.live.LiveListViewModel" />
+
+        <variable
+            name="mainVm"
+            type="com.example.cleanarchitectureexample.view.main.MainViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/sortingFrame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            tools:ignore="RelativeOverlap">
+
+            <TextView
+                android:id="@+id/sortingBest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.filterClick(LiveFilterType.Sorting.SORTING_BEST)}"
+                android:text="@string/sorting_best"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:setTypeFace="@{vm.sortingType == LiveFilterType.Sorting.SORTING_BEST ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/line_grey" />
+
+            <TextView
+                android:id="@+id/sortingNew"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.filterClick(LiveFilterType.Sorting.SORTING_NEW)}"
+                android:text="@string/sorting_new"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:setTypeFace="@{vm.sortingType == LiveFilterType.Sorting.SORTING_NEW ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/line_grey" />
+
+            <TextView
+                android:id="@+id/sortingView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> vm.filterClick(LiveFilterType.Sorting.SORTING_VIEW)}"
+                android:text="@string/sorting_view"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:setTypeFace="@{vm.sortingType == LiveFilterType.Sorting.SORTING_VIEW ? FontsTypes.BOLD : FontsTypes.REGULAR}" />
+        </LinearLayout>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_below="@+id/sortingFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:visibility="@{vm.viewState == ViewState.ERROR || vm.viewState == ViewState.EMPTY ? View.GONE : View.VISIBLE}"
+            tools:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_live_list" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="89dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="@{vm.viewState == ViewState.ERROR || vm.viewState == ViewState.EMPTY ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_none"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                android:gravity="center"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="6sp"
+                android:text="@{vm.viewState == ViewState.EMPTY ? @string/no_contents : @string/no_internet}"
+                android:textColor="@color/text_dark_grey"
+                android:textSize="14sp" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/fill_main_radius_50"
+                android:fontFamily="@font/noto_sans_cjk_kr_medium"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> vm.retryClick()}"
+                android:text="@string/retry"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:visibility="@{mainVm.isLogin ? View.GONE : View.VISIBLE}" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/goTopBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="72dp"
+            android:src="@drawable/ico_top"
+            android:visibility="@{vm.isTopButtonVisible()? View.VISIBLE : View.GONE, default = gone}"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
+</layout>

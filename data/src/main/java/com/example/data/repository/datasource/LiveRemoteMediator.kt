@@ -49,34 +49,14 @@ class LiveRemoteMediator @Inject constructor(
                  * refresh 할 때 별도의 작업을 하지 않는다면(혹은 확실하게 remoteKey 를 가져오지 못한다면) 0으로 고정하는게 좋을듯
                  * */
                 LoadType.REFRESH -> {
-                    /*val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    remoteKeys?.nextKey?.minus(1) ?: 0*/
                     0
                 }
 
-                /**
-                 * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
-                 * prevKey 를 구하여 진행하면 상단 아이템으로 스크롤 시 이전 페이지 정보를 가져옵니다.
-                 */
                 LoadType.PREPEND -> {
-                    /*val remoteKeys = getRemoteKeyForFirstItem(state)
-
-                    remoteKeys?.prevKey
-                        ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)*/
                     return MediatorResult.Success(endOfPaginationReached = true)
                 }
 
-                /**
-                 * remoteKeys 가 null 이면 새로 고침 결과가 아직 데이터베이스에 없음을 의미합니다.
-                 * RemoteKeys 가 null 이 아닌 경우 Paging 이 이 메서드를 다시 호출하기 때문에
-                 * endOfPaginationReached = false 로 Success 를 반환할 수 있습니다.
-                 * remoteKeys 가 null 이 아니지만 nextKey 가 null 이면 추가를 위한 페이지 매김 끝에 도달했음을 의미합니다.
-                 */
                 LoadType.APPEND -> {
-                    /*val remoteKeys = getRemoteKeyForLastItem(state)
-
-                    remoteKeys?.nextKey
-                        ?: return MediatorResult.Success(endOfPaginationReached = true)*/
                     val lastItem = state.lastItemOrNull()
                     val remoteKey: LiveRemoteKey? = database.withTransaction {
                         if (lastItem?.code != null) {
@@ -109,7 +89,6 @@ class LiveRemoteMediator @Inject constructor(
                         localDataSource.clearRemoteKeys()
                     }
 
-
                     val prevKey = if (page == 0) null else page - 1
                     val nextKey = if (endOfPaginationReached == page) null else page + 1
 
@@ -134,47 +113,6 @@ class LiveRemoteMediator @Inject constructor(
             MediatorResult.Error(e)
         } catch (e: HttpException) {
             MediatorResult.Error(e)
-        }
-    }
-
-    /**
-     * 항목이 포함된 검색된 마지막 페이지를 가져옵니다.
-     *
-     * 마지막 페이지에서 마지막 항목을 가져옵니다.
-     * */
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, LiveListEntity>): LiveRemoteKey? {
-        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { live ->
-                // Get the remote keys of the last item retrieved
-                localDataSource.remoteKeysWhereLiveId(live.code)
-            }
-    }
-
-    /**
-     * 항목이 포함된 검색된 첫 번째 페이지를 가져옵니다.
-     *
-     * 첫 페이지에서 첫 번째 항목을 가져옵니다.
-     * */
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, LiveListEntity>): LiveRemoteKey? {
-        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { live ->
-                // Get the remote keys of the first items retrieved
-                localDataSource.remoteKeysWhereLiveId(live.code)
-            }
-    }
-
-    /**
-     * 페이징 라이브러리가 앵커 위치 이후에 데이터를 로드하려고 합니다.
-     *
-     * 앵커 위치에 가장 가까운 항목을 가져옵니다.
-     * */
-    private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, LiveListEntity>
-    ): LiveRemoteKey? {
-        return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.code?.let { code ->
-                localDataSource.remoteKeysWhereLiveId(code)
-            }
         }
     }
 }

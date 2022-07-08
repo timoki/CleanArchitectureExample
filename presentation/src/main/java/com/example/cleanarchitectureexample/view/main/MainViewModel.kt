@@ -3,7 +3,6 @@ package com.example.cleanarchitectureexample.view.main
 import android.widget.CompoundButton
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.utils.ResourceProvider
 import com.example.data.db.database.DataStoreModule
@@ -12,7 +11,6 @@ import com.example.domain.model.config.ConfigDataModel
 import com.example.domain.model.live.LiveFilterType
 import com.example.domain.model.login.LoginDataModel
 import com.example.domain.usecase.config.GetConfigUseCase
-import com.example.domain.usecase.live.RequestGetLiveRemoteUseCase
 import com.example.domain.usecase.member.RequestMemberLoginUseCase
 import com.example.domain.usecase.member.RequestMemberLogoutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +25,6 @@ class MainViewModel @Inject constructor(
     private val getConfigUseCase: GetConfigUseCase,
     private val logoutUseCase: RequestMemberLogoutUseCase,
     private val requestMemberLoginUseCase: RequestMemberLoginUseCase,
-    private val requestGetLiveRemoteUseCase: RequestGetLiveRemoteUseCase,
     private val dataStore: DataStoreModule,
     private val resource: ResourceProvider
 ) : ViewModel() {
@@ -36,12 +33,6 @@ class MainViewModel @Inject constructor(
         class Ok(data: LoginDataModel) : LoginState()
         object Guest : LoginState()
     }
-
-    enum class ViewState {
-        NOT_EMPTY_ERROR, ERROR, VIEW, LOADING, EMPTY
-    }
-
-    val viewState = MutableStateFlow(ViewState.LOADING)
 
     val loginModel = MutableStateFlow<LoginState>(LoginState.Guest)
 
@@ -52,16 +43,15 @@ class MainViewModel @Inject constructor(
 
     val isShowProgress = MutableStateFlow(false)
 
+    val isMainContentsVisible = MutableStateFlow(true)
+
     private val _loginClickChannel = Channel<Unit>(Channel.CONFLATED)
     val loginClickChannel = _loginClickChannel.receiveAsFlow()
 
-    val isTopButtonVisible = MutableStateFlow(false)
+    private val _searchClickChannel = Channel<Unit>(Channel.CONFLATED)
+    val searchClickChannel = _searchClickChannel.receiveAsFlow()
 
     val isLogin = MutableStateFlow(false)
-
-    private val _sortingType = MutableStateFlow(LiveFilterType.Sorting.SORTING_NEW)
-    val sortingType
-        get() = _sortingType.asStateFlow()
 
     private val _adultType = MutableStateFlow(LiveFilterType.AdultFilter.HIDE_ADULT_LIVE)
     val adultType
@@ -138,7 +128,7 @@ class MainViewModel @Inject constructor(
                         dataStore.savePw("")
                         dataStore.saveAutoLogin(false)
 
-                        _networkState.send(true to "로그아웃 되셨습니다.")
+                        _networkState.send(true to resource.getString(R.string.logout_success))
                     }
                 }
 
@@ -178,7 +168,7 @@ class MainViewModel @Inject constructor(
                         _networkState.send(
                             if (data != null && data.result) {
                                 loginModel.value = LoginState.Ok(data)
-                                true to "로그인에 성공하셨습니다."
+                                true to resource.getString(R.string.login_success)
                             } else {
                                 false to resource.getString(R.string.warning_auto_login)
                             }
@@ -203,9 +193,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    val getAllLive =
-        requestGetLiveRemoteUseCase(20, sortingType, adultType).cachedIn(scope = viewModelScope)
-
     //로그인 처리
     private fun requestLogin(id: String, pw: String) =
         requestMemberLoginUseCase(id, pw)
@@ -215,19 +202,19 @@ class MainViewModel @Inject constructor(
                 initialValue = Result.Loading()
             )
 
-    fun filterClick(type: LiveFilterType.Sorting) {
-        _sortingType.value = type
+    fun guestSwitchCheck(btn: CompoundButton, b: Boolean) {
+        btn.isChecked = !b
+        viewModelScope.launch {
+            _loginClickChannel.send(Unit)
+        }
     }
 
     fun adultSwitchCheck(type: LiveFilterType.AdultFilter) {
         _adultType.value = type
     }
 
-    fun guestSwitchCheck(btn: CompoundButton, b: Boolean) {
-        btn.isChecked = !b
-        viewModelScope.launch {
-            _loginClickChannel.send(Unit)
-        }
+    fun searchClick() = viewModelScope.launch {
+        _searchClickChannel.send(Unit)
     }
 
     companion object {

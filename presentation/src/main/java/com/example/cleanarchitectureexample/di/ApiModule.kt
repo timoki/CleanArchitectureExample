@@ -1,13 +1,19 @@
 package com.example.cleanarchitectureexample.di
 
+import android.content.Context
 import androidx.viewbinding.BuildConfig
 import com.example.data.api.ApiService
 import com.example.domain.model.base.Constants
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -47,9 +53,17 @@ object ApiModule {
     @Singleton
     @Provides
     fun okHttpClient(
-        interceptor: HttpLoggingInterceptor
+        @ApplicationContext context: Context,
+        interceptor: HttpLoggingInterceptor,
+        headerInterceptor: Interceptor
     ): OkHttpClient = OkHttpClient.Builder()
+        .cookieJar(
+            PersistentCookieJar(
+                SetCookieCache(), SharedPrefsCookiePersistor(context)
+            )
+        )
         .addInterceptor(interceptor)
+        .addInterceptor(headerInterceptor)
         .addNetworkInterceptor(StethoInterceptor())
         .build()
 
@@ -62,5 +76,21 @@ object ApiModule {
             } else {
                 HttpLoggingInterceptor.Level.NONE
             }
+        }
+
+    @Singleton
+    @Provides
+    fun provideHeaderInterceptor(): Interceptor = // 헤더는 원래 어플의 설정값을 입력해야 하지만 일단 테스트를 위해 고정값으로 설정
+        Interceptor {
+            it.proceed(
+                it.request()
+                    .newBuilder()
+                    .addHeader("t", "android")
+                    .addHeader("v", "3.1.10")
+                    .addHeader("p", "kr.co.pandatv.player")
+                    .addHeader("i", "blAyc0RqUE1ZMW9vNGFxWmdwRWpmeGhOQWZwci95N1hqVnNTbkJZVUl2UQo")
+                    .addHeader("s", "playstore")
+                    .build()
+            )
         }
 }

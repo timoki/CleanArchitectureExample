@@ -2,9 +2,10 @@
     <string name="app_name">아키텍쳐 테스트</string>
     <string name="action_send">전송</string>
 
-    <string name="empty_string"></string>
     <string name="logout">로그아웃</string>
     <string name="retry">재시도</string>
+    <string name="login_success">로그인에 성공하셨습니다.</string>
+    <string name="logout_success">로그아웃 되었습니다.</string>
     <string name="no_internet">인터넷이 연결되지 않았습니다.</string>
     <string name="no_login_text">로그인 후 회원님만을 위한\n콘텐츠를 확인하세요!</string>
     <string name="go_login">로그인하기</string>
@@ -36,7 +37,6 @@
     <string name="agree3">[필수] 만 14세 이상입니다.</string>
     <string name="agree4">[선택] 무료하트 및 하트 이벤트 정보 알림에 동의</string>
 
-    <string name="login_success">로그인 되었습니다.</string>
     <string name="join_success">회원가입이 완료되었습니다.</string>
 
     <string name="warning_loginMust">로그인이 필요합니다.</string>
@@ -56,6 +56,14 @@
     <string name="warning_pw_match">입력한 비밀번호와 다릅니다.</string>
     <string name="warning_unknown">알수없는 오류가 발생하였습니다.</string>
     <string name="warning_auto_login">자동 로그인에 실패하였습니다.</string>
+
+    <!-- 검색 페이지 -->
+    <string name="search_hint">BJ명 또는 제목을 입력해 주세요.</string>
+    <string name="search_live_tab">LIVE방송</string>
+    <string name="search_bj_tab">BJ</string>
+
+    <string name="search_shot_length">검색어는 2자이상 입력해주세요.</string>
+    <string name="search_no_result">검색 결과가 없습니다.</string>
 
 
     <string name="sorting_best">인기순</string>

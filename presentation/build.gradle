@@ -132,6 +132,9 @@ dependencies {
     // SwipeRefreshLayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:4.9.1"
+    implementation 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+
     implementation project(path: ':domain')
     implementation project(path: ':data')
 }

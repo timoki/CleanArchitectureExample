@@ -38,12 +38,20 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="SelectTabTextAppearance" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">15sp</item>
+    <style name="TabTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:textColorSecondary">@android:color/black</item>
+        <item name="colorAccent">@android:color/black</item>
+    </style>
+
+    <style name="TabItemText" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/noto_sans_cjk_kr_bold</item>
+        <item name="tabSelectedTextColor">@color/black</item>
         <item name="android:textColor">@color/black</item>
-        <item name="fontFamily">@font/noto_sans_cjk_kr_medium</item>
-        <item name="android:letterSpacing">-0.03</item>
-        <item name="lineSpacing">3sp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="AppEditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
@@ -66,57 +74,5 @@
         <item name="android:paddingEnd">0dp</item>
         <item name="android:paddingBottom">0dp</item>
     </style>
-
-    <!--<style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-        &lt;!&ndash;FilledBox일 경우 밑줄 색상, OutlinedBox일 경우 테두리 색상&ndash;&gt;
-        <item name="boxStrokeColor">@color/app_color</item>
-        &lt;!&ndash;Counter&ndash;&gt;
-        <item name="counterTextAppearance">@style/CounterTextAppearance</item>
-        &lt;!&ndash;EditText에 있을때의 Hint&ndash;&gt;
-        <item name="android:textColorHint">@color/text_black</item>
-        &lt;!&ndash;상단에 있을때의 Hint&ndash;&gt;
-        <item name="hintTextColor">@color/app_color</item>
-        <item name="hintTextAppearance">@style/HintTextAppearance</item>
-        &lt;!&ndash;Helper&ndash;&gt;
-        <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
-        &lt;!&ndash;Error&ndash;&gt;
-        <item name="errorEnabled">true</item>
-        <item name="colorError">@color/colorAccent</item>
-        <item name="errorIconDrawable">@android:color/transparent</item>
-        <item name="errorTextAppearance">@style/ErrorTextAppearance</item>
-    </style>
-
-    <style name="ErrorTextAppearance">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="HintTextAppearance">
-        <item name="android:fontFamily">@font/noto_sans_cjk_kr_regular</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="HelperTextAppearance">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="CounterTextAppearance">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextInputEditTextStyle">
-        <item name="android:textStyle">normal</item>
-        <item name="android:includeFontPadding">false</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/black</item>
-    </style>-->
 
 </resources>

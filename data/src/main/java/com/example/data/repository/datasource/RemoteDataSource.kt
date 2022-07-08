@@ -46,4 +46,11 @@ interface RemoteDataSource {
         orderBy: String,
         adultType: String
     ) : Response<LiveResult>
+
+    /** Search */
+    suspend fun getLiveSearch(
+        offset: Int,
+        limit: Int,
+        searchText: String
+    ) : Response<LiveResult>
 }

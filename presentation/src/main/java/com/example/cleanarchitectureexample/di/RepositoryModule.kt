@@ -1,15 +1,16 @@
 package com.example.cleanarchitectureexample.di
 
-import com.example.data.db.database.DataStoreModule
 import com.example.data.db.database.LiveDatabase
 import com.example.data.repository.config.ConfigRepositoryImpl
 import com.example.data.repository.datasource.LocalDataSource
-import com.example.data.repository.member.MemberRepositoryImpl
 import com.example.data.repository.datasource.RemoteDataSource
 import com.example.data.repository.live.LiveRepositoryImpl
+import com.example.data.repository.member.MemberRepositoryImpl
+import com.example.data.repository.search.SearchRepositoryImpl
 import com.example.domain.repository.ConfigRepository
 import com.example.domain.repository.LiveRepository
 import com.example.domain.repository.MemberRepository
+import com.example.domain.repository.SearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,4 +40,10 @@ object RepositoryModule {
         localDataSource: LocalDataSource,
         liveDatabase: LiveDatabase
     ): LiveRepository = LiveRepositoryImpl(remoteDataSource, localDataSource, liveDatabase)
+
+    @Singleton
+    @Provides
+    fun provideSearchRepository(
+        remoteDataSource: RemoteDataSource
+    ): SearchRepository = SearchRepositoryImpl(remoteDataSource)
 }

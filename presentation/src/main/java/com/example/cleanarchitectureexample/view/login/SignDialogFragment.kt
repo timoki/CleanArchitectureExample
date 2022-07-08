@@ -2,17 +2,16 @@ package com.example.cleanarchitectureexample.view.login
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cleanarchitectureexample.R
 import com.example.cleanarchitectureexample.databinding.DialogSignBinding
+import com.example.cleanarchitectureexample.utils.Common
 import com.example.cleanarchitectureexample.utils.observeInLifecycle
 import com.example.cleanarchitectureexample.view.main.MainViewModel
 import com.example.cleanarchitectureexample.view.webViewAct.WebViewActivity
@@ -73,27 +72,21 @@ class SignDialogFragment : DialogFragment() {
             model?.let {
                 mainViewModel.loginModel.value = MainViewModel.LoginState.Ok(it)
 
-                Toast.makeText(
-                    requireContext(),
-                    "${model.loginInfo.userInfo.nick} 님이 로그인에 성공하였습니다.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Common.showSnackBar(
+                    mBinding.root,
+                    "${model.loginInfo.userInfo.nick} 님이 로그인에 성공하였습니다."
+                )
             }
 
             dismiss()
         }.observeInLifecycle(viewLifecycleOwner)
 
         joinSuccess.onEach {
-            Toast.makeText(
-                context,
-                resources.getString(R.string.join_success),
-                Toast.LENGTH_SHORT
-            ).show()
+            Common.showSnackBar(mBinding.root, resources.getString(R.string.join_success))
         }.observeInLifecycle(viewLifecycleOwner)
 
         networkError.onEach {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            Log.e(TAG, "NetworkError -> $it")
+            Common.showSnackBar(mBinding.root, it)
         }.observeInLifecycle(viewLifecycleOwner)
 
         actionWebView.onEach {
@@ -153,7 +146,6 @@ class SignDialogFragment : DialogFragment() {
     }
 
     companion object {
-        private const val TAG = "SignDialogFragment"
         fun newInstance(): SignDialogFragment = SignDialogFragment()
     }
 }

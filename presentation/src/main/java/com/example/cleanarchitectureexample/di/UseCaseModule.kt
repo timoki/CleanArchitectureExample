@@ -3,11 +3,13 @@ package com.example.cleanarchitectureexample.di
 import com.example.domain.repository.ConfigRepository
 import com.example.domain.repository.LiveRepository
 import com.example.domain.repository.MemberRepository
+import com.example.domain.repository.SearchRepository
 import com.example.domain.usecase.config.DeleteConfigLocalUseCase
 import com.example.domain.usecase.config.GetConfigUseCase
 import com.example.domain.usecase.config.InsertConfigLocalUseCase
 import com.example.domain.usecase.live.RequestGetLiveRemoteUseCase
 import com.example.domain.usecase.member.*
+import com.example.domain.usecase.search.RequestGetLiveSearchRemoteUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,4 +78,10 @@ object UseCaseModule {
     fun provideRequestGetLiveRemoteUseCase(
         liveRepository: LiveRepository
     ): RequestGetLiveRemoteUseCase = RequestGetLiveRemoteUseCase(liveRepository)
+
+    @ViewModelScoped
+    @Provides
+    fun provideRequestGetLiveSearchRemoteUseCase(
+        searchRepository: SearchRepository
+    ): RequestGetLiveSearchRemoteUseCase = RequestGetLiveSearchRemoteUseCase(searchRepository)
 }

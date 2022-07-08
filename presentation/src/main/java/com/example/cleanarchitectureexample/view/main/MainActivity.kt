@@ -3,21 +3,21 @@ package com.example.cleanarchitectureexample.view.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.cleanarchitectureexample.base.BaseFragment
 import com.example.cleanarchitectureexample.databinding.ActivityMainBinding
+import com.example.cleanarchitectureexample.utils.Common
+import com.example.cleanarchitectureexample.utils.FragmentNavigation
 import com.example.cleanarchitectureexample.utils.observeInLifecycle
 import com.example.cleanarchitectureexample.utils.observeOnLifecycle
+import com.example.cleanarchitectureexample.view.live.LiveListFragment
 import com.example.cleanarchitectureexample.view.login.SignDialogFragment
-import com.example.cleanarchitectureexample.view.main.adapter.LiveListDataAdapter
-import com.example.cleanarchitectureexample.view.main.adapter.PagingLoadStateAdapter
+import com.example.cleanarchitectureexample.view.search.SearchFragment
 import com.example.data.db.database.DataStoreModule
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -26,26 +26,21 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
+class MainActivity
+    : AppCompatActivity(),
+    BaseFragment.OnFragmentInteractionListener,
+    FragmentNavigation.RootFragmentListener {
     private val mBinding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val adapter by lazy {
-        LiveListDataAdapter()
-    }
+    private lateinit var mFragmentNavigation: FragmentNavigation
 
-    private val header: PagingLoadStateAdapter by lazy {
-        PagingLoadStateAdapter { adapter.retry() }
-    }
-
-    private val footer: PagingLoadStateAdapter by lazy {
-        PagingLoadStateAdapter { adapter.retry() }
+    private val rootFragment: Array<Fragment> by lazy {
+        arrayOf(LiveListFragment())
     }
 
     @Inject
@@ -59,7 +54,7 @@ class MainActivity : AppCompatActivity() {
     private val permissionResultLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
             if (result.all { permissions -> permissions.value }) {
-                Toast.makeText(this, "권한 설정 완료", Toast.LENGTH_SHORT).show()
+                Common.showSnackBar(mBinding.root, "권한 설정 완료")
             } else {
                 finish()
             }
@@ -71,114 +66,31 @@ class MainActivity : AppCompatActivity() {
         mBinding.lifecycleOwner = this
         setContentView(mBinding.root)
 
+        mFragmentNavigation = FragmentNavigation(
+            this@MainActivity,
+            supportFragmentManager,
+            mBinding.frame.id
+        )
+
         if (!checkPermission(permissions)) {
             permissionResultLauncher.launch(permissions)
-        }
-
-        adapter.apply {
-            mBinding.list.adapter = withLoadStateHeaderAndFooter(
-                header = header,
-                footer = footer
-            )
-
-            viewModel.getAllLive.observeOnLifecycle(this@MainActivity) {
-                adapter.submitData(it)
-            }
-
-            loadStateFlow.observeOnLifecycle(this@MainActivity) { loadState ->
-                mBinding.refresh.isRefreshing =
-                    loadState.source.refresh is LoadState.Loading || loadState.mediator?.refresh is LoadState.Loading
-
-                header.loadState = loadState.mediator
-                    ?.refresh
-                    ?.takeIf { it is LoadState.Error && adapter.itemCount > 0 }
-                    ?: loadState.prepend
-
-                val notLoadingState = loadState.mediator?.append as? LoadState.NotLoading
-                    ?: loadState.mediator?.prepend as? LoadState.NotLoading
-                    ?: loadState.source.append as? LoadState.NotLoading
-                    ?: loadState.source.prepend as? LoadState.NotLoading
-                    ?: loadState.append as? LoadState.NotLoading
-                    ?: loadState.prepend as? LoadState.NotLoading
-
-                val loadingState = loadState.mediator?.append as? LoadState.Loading
-                    ?: loadState.mediator?.prepend as? LoadState.Loading
-                    ?: loadState.source.append as? LoadState.Loading
-                    ?: loadState.source.prepend as? LoadState.Loading
-                    ?: loadState.append as? LoadState.Loading
-                    ?: loadState.prepend as? LoadState.Loading
-
-                val errorState = loadState.mediator?.append as? LoadState.Error
-                    ?: loadState.mediator?.prepend as? LoadState.Error
-                    ?: loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-
-                when {
-                    errorState != null -> {
-                        viewModel.viewState.value =
-                            if (adapter.itemCount <= 0) MainViewModel.ViewState.ERROR
-                            else MainViewModel.ViewState.NOT_EMPTY_ERROR
-                    }
-
-                    loadingState != null -> {
-                        viewModel.viewState.value = MainViewModel.ViewState.LOADING
-                    }
-
-                    notLoadingState != null -> {
-                        viewModel.viewState.value =
-                            if (adapter.itemCount <= 0) MainViewModel.ViewState.EMPTY
-                            else MainViewModel.ViewState.VIEW
-                    }
-                }
-            }
         }
 
         lifecycleScope.launch {
             viewModel.getConfig()
         }
 
-        initListener()
         initViewModelCallback()
-    }
-
-    private fun initListener() = with(mBinding) {
-        goTopBtn.setOnClickListener {
-            list.smoothScrollToPosition(0)
-        }
-
-        list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val position =
-                    (list.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                viewModel.isTopButtonVisible.value = position >= 3
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {}
-        })
-
-        mBinding.refresh.setOnRefreshListener {
-            if (mBinding.refresh.isRefreshing) {
-                mBinding.refresh.isRefreshing = false
-            }
-
-            adapter.refresh()
-        }
     }
 
     private fun initViewModelCallback() = with(viewModel) {
         loginModel.observeOnLifecycle(this@MainActivity) { type ->
             isLogin.value = type is MainViewModel.LoginState.Ok
+            mFragmentNavigation.switchTab(0)
         }
 
         networkState.onEach {
-            Toast.makeText(
-                this@MainActivity,
-                it.second,
-                Toast.LENGTH_LONG
-            ).show()
-
+            Common.showSnackBar(mBinding.root, it.second)
             return@onEach
         }.observeInLifecycle(this@MainActivity)
 
@@ -192,20 +104,15 @@ class MainActivity : AppCompatActivity() {
             }
         }.observeInLifecycle(this@MainActivity)
 
+        searchClickChannel.onEach {
+            viewModel.isMainContentsVisible.value = false
+            onFragmentPush(SearchFragment())
+        }.observeInLifecycle(this@MainActivity)
+
         lifecycleScope.launch(Dispatchers.IO) {
             if (dataStore.isAutoLogin().first()) {
                 viewModel.login()
             }
-        }
-
-        sortingType.observeOnLifecycle(this@MainActivity) {
-            mBinding.list.scrollToPosition(0)
-            adapter.refresh()
-        }
-
-        adultType.observeOnLifecycle(this@MainActivity) {
-            mBinding.list.scrollToPosition(0)
-            adapter.refresh()
         }
     }
 
@@ -216,5 +123,17 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    override fun getRootFragment(index: Int): Fragment {
+        return (rootFragment[index] as BaseFragment<*, *>).newInstance(index, 0)
+    }
+
+    override fun onFragmentPush(fragment: Fragment) {
+        mFragmentNavigation.pushFragment(fragment)
+    }
+
+    override fun onFragmentPop() {
+        mFragmentNavigation.popFragment()
     }
 }

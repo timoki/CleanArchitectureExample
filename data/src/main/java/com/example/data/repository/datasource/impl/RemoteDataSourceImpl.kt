@@ -54,4 +54,12 @@ class RemoteDataSourceImpl @Inject constructor(
     ): Response<LiveResult> {
         return service.getLiveList(offset, limit, orderBy, adultType)
     }
+
+    override suspend fun getLiveSearch(
+        offset: Int,
+        limit: Int,
+        searchText: String
+    ): Response<LiveResult> {
+        return service.getLiveSearchList(offset, limit, searchText)
+    }
 }
