@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.example.cleanarchitectureexample.utils.FontsTypes" />
+
+        <variable
+            name="signViewModel"
+            type="com.example.cleanarchitectureexample.view.login.SignDialogViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transfer"
+        android:gravity="center"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:theme="@style/MaterialTheme">
+
+        <ImageView
+            android:id="@+id/imageClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:onClick="@{() -> signViewModel.closeButtonClick()}"
+            android:src="@drawable/popup_btn_close"
+            tools:ignore="ContentDescription" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageClose"
+            android:layout_marginTop="12dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="42dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@{signViewModel.isSelectedToLoginTab ? @drawable/fill_white_radius_top_14 : @drawable/fill_disable_radius_top_14}"
+                        android:gravity="center"
+                        android:onClick="@{() -> signViewModel.loginTabClick()}"
+                        android:text="@string/login"
+                        android:textColor="@{signViewModel.isSelectedToLoginTab ? @color/black : @color/text_grey}"
+                        android:textSize="15sp"
+                        app:setTypeFace="@{signViewModel.isSelectedToLoginTab ? FontsTypes.MEDIUM : FontsTypes.REGULAR}"
+                        tools:background="@drawable/fill_white_radius_top_14"
+                        tools:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@{signViewModel.isSelectedToLoginTab ? @drawable/fill_disable_radius_top_14 : @drawable/fill_white_radius_top_14}"
+                        android:gravity="center"
+                        android:onClick="@{() -> signViewModel.joinTabClick()}"
+                        android:text="@string/join"
+                        android:textColor="@{signViewModel.isSelectedToLoginTab ? @color/text_grey : @color/black}"
+                        android:textSize="15sp"
+                        app:setTypeFace="@{signViewModel.isSelectedToLoginTab ? FontsTypes.REGULAR : FontsTypes.MEDIUM}"
+                        tools:background="@drawable/fill_disable_radius_top_14"
+                        tools:textColor="@color/text_grey" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:src="@{signViewModel.isSelectedToLoginTab ? @drawable/tab_menu_bg : @drawable/tab_menu_bg_02}"
+                    tools:ignore="ContentDescription"
+                    tools:src="@drawable/tab_menu_bg" />
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/loginLayout"
+                layout="@layout/dialog_login_tab"
+                android:visibility="@{signViewModel.isSelectedToLoginTab() ? View.VISIBLE : View.GONE, default = visible}" />
+
+            <include
+                android:id="@+id/joinLayout"
+                layout="@layout/dialog_join_tab"
+                android:visibility="@{signViewModel.isSelectedToLoginTab() ? View.GONE : View.VISIBLE, default = gone}" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{signViewModel.isShowProgress ? View.VISIBLE : View.GONE}"
+            tools:visibility="gone" />
+    </RelativeLayout>
+</layout>

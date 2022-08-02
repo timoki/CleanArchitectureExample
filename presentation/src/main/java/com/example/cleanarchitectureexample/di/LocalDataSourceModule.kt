@@ -1,11 +1,10 @@
 package com.example.cleanarchitectureexample.di
 
-import com.example.data.api.ConfigService
 import com.example.data.db.dao.ConfigDataDao
-import com.example.data.repository.datasource.ConfigLocalDataSource
-import com.example.data.repository.datasource.ConfigRemoteDataSource
-import com.example.data.repository.datasource.impl.ConfigLocalDataSourceImpl
-import com.example.data.repository.datasource.impl.ConfigRemoteDataSourceImpl
+import com.example.data.db.dao.live.LiveDataDao
+import com.example.data.db.dao.live.LiveRemoteKeysDao
+import com.example.data.repository.datasource.LocalDataSource
+import com.example.data.repository.datasource.impl.LocalDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +17,8 @@ object LocalDataSourceModule {
     @Singleton
     @Provides
     fun provideConfigLocalDataSource(
-        configDataDao: ConfigDataDao
-    ) : ConfigLocalDataSource = ConfigLocalDataSourceImpl(configDataDao)
+        configDataDao: ConfigDataDao,
+        liveDataDao: LiveDataDao,
+        liveRemoteKeysDao: LiveRemoteKeysDao
+    ): LocalDataSource = LocalDataSourceImpl(configDataDao, liveDataDao, liveRemoteKeysDao)
 }

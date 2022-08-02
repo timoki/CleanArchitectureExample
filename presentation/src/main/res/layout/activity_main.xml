@@ -1,37 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
+
+        <import type="android.view.View" />
+
+        <import type="com.example.cleanarchitectureexample.utils.FontsTypes" />
+
+        <import type="com.example.domain.model.live.LiveFilterType" />
 
         <variable
             name="mainViewModel"
-            type="com.example.cleanarchitectureexample.view.MainViewModel" />
+            type="com.example.cleanarchitectureexample.view.main.MainViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.MainActivity">
+        tools:context=".view.main.MainActivity">
+
+        <RelativeLayout
+            android:id="@+id/topBar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:padding="12dp"
+            android:visibility="@{mainViewModel.isMainContentsVisible() ? View.VISIBLE : View.GONE}">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/logo"
+                tools:ignore="ContentDescription" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ico_19_bk"
+                    tools:ignore="ContentDescription" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:onCheckedChanged="@{(btn, b) -> mainViewModel.isLogin() ? mainViewModel.adultSwitchCheck(b ? LiveFilterType.AdultFilter.VIEW_ADULT_LIVE : LiveFilterType.AdultFilter.HIDE_ADULT_LIVE) : mainViewModel.guestSwitchCheck(btn, b)}"
+                    android:thumb="@drawable/switch_thumb"
+                    android:track="@drawable/selector_switch_track"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+                <ImageView
+                    android:id="@+id/searchBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> mainViewModel.isLogin() ? mainViewModel.searchClick() : mainViewModel.loginClick()}"
+                    android:src="@drawable/btn_search"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/button"
+            android:layout_below="@+id/topBar"
+            android:visibility="@{mainViewModel.isLogin() ? View.VISIBLE : View.GONE}" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="89dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="@{mainViewModel.isLogin ? View.GONE : View.VISIBLE}"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_none"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                android:gravity="center"
+                android:letterSpacing="-0.02"
+                android:lineSpacingExtra="6sp"
+                android:text="@string/no_login_text"
+                android:textColor="@color/text_dark_grey"
+                android:textSize="14sp" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/fill_main_radius_50"
+                android:fontFamily="@font/noto_sans_cjk_kr_medium"
+                android:includeFontPadding="false"
+                android:onClick="@{() -> mainViewModel.loginClick()}"
+                android:text="@string/go_login"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:onClick="@{() -> mainViewModel.isLogin ? mainViewModel.logoutClick() : mainViewModel.loginClick()}"
+            android:text="@{mainViewModel.isLogin ? @string/logout : @string/login}"
+            android:visibility="@{mainViewModel.isMainContentsVisible() ? View.VISIBLE : View.GONE}"
+            tools:visibility="visible" />
 
         <ProgressBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="@{mainViewModel.isShowProgress()? View.VISIBLE : View.GONE, default = gone}"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/action_send"
-            android:onClick="@{() -> mainViewModel.sendRequest()}"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_centerInParent="true"
+            android:visibility="@{mainViewModel.isShowProgress()? View.VISIBLE : View.GONE, default = gone}" />
+    </RelativeLayout>
 </layout>
 

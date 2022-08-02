@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
+
+        <variable
+            name="signViewModel"
+            type="com.example.cleanarchitectureexample.view.login.SignDialogViewModel" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fill_white_radius_bottom_14">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/noto_sans_cjk_kr_bold"
+                android:letterSpacing="-0.03"
+                android:lineSpacingExtra="5sp"
+                android:text="@string/sns_login"
+                android:textColor="@color/text_black"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.kakao ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.naver ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.google ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/sns_google"
+                    android:visibility="@{signViewModel.facebook ? View.VISIBLE : View.GONE}"
+                    tools:ignore="ContentDescription" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/line_light_grey" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/noto_sans_cjk_kr_bold"
+                android:letterSpacing="-0.03"
+                android:lineSpacingExtra="5sp"
+                android:text="@string/panda_login"
+                android:textColor="@color/text_black"
+                android:textSize="15sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/AppEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:helperText="@{signViewModel.loginIdHelperText}"
+                android:hint="@string/id">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/AppEditTextAppearance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text="@={signViewModel.loginIdText}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/AppEditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="46.5dp"
+                app:helperText="@{signViewModel.loginPwHelperText}"
+                android:hint="@string/pw">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/AppEditTextAppearance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:text="@={signViewModel.loginPwText}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@drawable/selector_checkbox"
+                    android:checked="@{signViewModel.isIdSaveChecked ? true : false}"
+                    android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:text="@string/save_id"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:onClick="@{() -> signViewModel.onSaveIdClick()}"
+                    tools:checked="false"
+                    tools:ignore="RtlSymmetry" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:button="@drawable/selector_checkbox"
+                    android:checked="@{signViewModel.isAutoLoginChecked ? true : false}"
+                    android:fontFamily="@font/noto_sans_cjk_kr_regular"
+                    android:gravity="center"
+                    android:paddingStart="10dp"
+                    android:text="@string/auto_login"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:onClick="@{() -> signViewModel.onAutoLoginClick()}"
+                    tools:checked="false"
+                    tools:ignore="RtlSymmetry" />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_default"
+                android:enabled="@{!TextUtils.isEmpty(signViewModel.loginIdText) &amp;&amp; !TextUtils.isEmpty(signViewModel.loginPwText) ? true : false}"
+                android:onClick="@{() -> signViewModel.loginBtnClick()}"
+                android:text="@string/login"
+                android:textColor="@color/white"
+                tools:enabled="false" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp">
+
+                <TextView
+                    android:id="@+id/findId"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/line"
+                    android:fontFamily="@font/noto_sans_cjk_kr_demi_light"
+                    android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
+                    android:text="@string/find_id"
+                    android:textColor="@color/text_dark_grey"
+                    android:textSize="13sp"
+                    tools:ignore="RelativeOverlap" />
+
+                <View
+                    android:id="@+id/line"
+                    android:layout_width="1dp"
+                    android:layout_height="11dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@color/line_small" />
+
+                <TextView
+                    android:id="@+id/findPw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/line"
+                    android:fontFamily="@font/noto_sans_cjk_kr_demi_light"
+                    android:onClick="@{(v) -> signViewModel.onSendWebView(v)}"
+                    android:text="@string/find_pw"
+                    android:textColor="@color/text_dark_grey"
+                    android:textSize="13sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>

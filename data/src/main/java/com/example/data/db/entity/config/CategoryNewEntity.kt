@@ -1,26 +1,18 @@
 package com.example.data.db.entity.config
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.ColumnInfo
 
-@Entity(
-    tableName = "configDataCategoryNew",
-    foreignKeys = [
-        ForeignKey(
-            entity = ConfigDataEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["id"]
-        )
-    ]
-)
 data class CategoryNewEntity (
-    @PrimaryKey
-    val id: Long,
+    @ColumnInfo(name = "code")
     val code: String,
+    @ColumnInfo(name = "idx")
     val idx: Int,
+    @ColumnInfo(name = "isList")
     val isList: Boolean,
+    @ColumnInfo(name = "isView")
     val isView: Boolean,
+    @ColumnInfo(name = "title")
     val title: String,
+    @ColumnInfo(name = "type")
     val type: String
 )

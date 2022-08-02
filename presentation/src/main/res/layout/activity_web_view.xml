@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="showTitle"
+            type="Boolean" />
+
+        <variable
+            name="webViewViewModel"
+            type="com.example.cleanarchitectureexample.view.webViewAct.WebViewActViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> webViewViewModel.onBackClick()}"
+                    android:src="@drawable/btn_back"
+                    tools:src="@drawable/btn_back"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="21.5dp"
+                    android:fontFamily="@font/noto_sans_cjk_kr_medium"
+                    android:text="@{title}"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:visibility="@{showTitle ? View.VISIBLE : View.GONE}" />
+            </LinearLayout>
+
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{webViewViewModel.isShowProgress ? View.VISIBLE : View.GONE, default = gone}" />
+    </RelativeLayout>
+
+</layout>

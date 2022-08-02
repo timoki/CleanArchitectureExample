@@ -10,7 +10,7 @@ import com.example.data.db.entity.config.ConfigDataEntity
  * */
 @Dao
 interface ConfigDataDao {
-    @Query("SELECT * FROM 'configData' WHERE 'id' = 1")
+    @Query("SELECT * FROM configData WHERE id = 1")
     suspend fun getConfigDataLocal(): ConfigDataEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

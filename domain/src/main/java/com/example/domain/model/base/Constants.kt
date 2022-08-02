@@ -5,6 +5,4 @@ package com.example.domain.model.base
  * */
 object Constants {
     const val BASE_URL = "https://api.pandalive.co.kr/v1/"
-
-    const val configAppMethod = "config/app"
 }
