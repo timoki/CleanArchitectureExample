@@ -48,6 +48,10 @@ class MainViewModel @Inject constructor(
             initialValue = Result.Loading()
         )
 
+    fun test() {
+        
+    }
+
     fun getConfig() = viewModelScope.launch {
         requestGetConfig().collectLatest { type ->
             when(type) {
