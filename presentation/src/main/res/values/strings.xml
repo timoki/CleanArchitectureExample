@@ -15,7 +15,6 @@
     <string name="login">로그인</string>
     <string name="join">회원가입</string>
     <string name="sns_login">SNS계정으로 간편로그인</string>
-    <string name="panda_login">팬더티비 로그인</string>
     <string name="id">아이디</string>
     <string name="pw">비밀번호</string>
     <string name="save_id">아이디 저장</string>
@@ -25,7 +24,6 @@
 
     <!-- 회원가입 팝업 -->
     <string name="sns_join">SNS계정으로 간편가입</string>
-    <string name="panda_join">팬더티비 회원가입</string>
     <string name="pw_re">비밀번호 확인</string>
     <string name="nickname">닉네임</string>
     <string name="id_check">6~15자 이내의 문자/숫자</string>
@@ -35,7 +33,7 @@
     <string name="agree1">[필수] 서비스 이용약관 동의</string>
     <string name="agree2">[필수] 개인정보 처리방침 동의</string>
     <string name="agree3">[필수] 만 14세 이상입니다.</string>
-    <string name="agree4">[선택] 무료하트 및 하트 이벤트 정보 알림에 동의</string>
+    <string name="agree4">[선택] 이벤트 정보 알림에 동의</string>
 
     <string name="join_success">회원가입이 완료되었습니다.</string>
 
@@ -58,9 +56,9 @@
     <string name="warning_auto_login">자동 로그인에 실패하였습니다.</string>
 
     <!-- 검색 페이지 -->
-    <string name="search_hint">BJ명 또는 제목을 입력해 주세요.</string>
-    <string name="search_live_tab">LIVE방송</string>
-    <string name="search_bj_tab">BJ</string>
+    <string name="search_hint">스트리머명 또는 제목을 입력해 주세요.</string>
+    <string name="search_live_tab">LIVE</string>
+    <string name="search_bj_tab">스트리머</string>
 
     <string name="search_shot_length">검색어는 2자이상 입력해주세요.</string>
     <string name="search_no_result">검색 결과가 없습니다.</string>

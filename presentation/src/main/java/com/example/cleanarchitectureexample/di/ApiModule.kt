@@ -87,7 +87,7 @@ object ApiModule {
                     .newBuilder()
                     .addHeader("t", "android")
                     .addHeader("v", "3.1.10")
-                    .addHeader("p", "kr.co.pandatv.player")
+                    .addHeader("p", "com.example.cleanarchitectureexample")
                     .addHeader("i", "blAyc0RqUE1ZMW9vNGFxWmdwRWpmeGhOQWZwci95N1hqVnNTbkJZVUl2UQo")
                     .addHeader("s", "playstore")
                     .build()

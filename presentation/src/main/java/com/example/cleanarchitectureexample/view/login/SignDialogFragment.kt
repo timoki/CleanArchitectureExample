@@ -125,7 +125,7 @@ class SignDialogFragment : DialogFragment() {
                         startActivity(
                             WebViewActivity.getInAppBrowserIntent(
                                 activity = requireActivity(),
-                                url = "https://www.pandalive.co.kr/policy/youth",
+                                url = "",
                                 pageTitle = "청소년 보호정책"
                             )
                         )

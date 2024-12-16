@@ -35,23 +35,11 @@
                     android:layout_height="match_parent"
                     tools:ignore="ContentDescription" />
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="14dp"
-                    android:layout_margin="4dp"
-                    app:setDrawableImage="@{info.liveType.equals(`live`) ? @drawable/ico_live : @drawable/ico_rec}"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="68dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ico_listup_premium"
-                    tools:ignore="ContentDescription" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -65,20 +53,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ico_19"
-                            android:visibility="@{info.isAdult ? View.VISIBLE : View.GONE}"
-                            tools:ignore="ContentDescription" />
-
-                        <ImageView
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_marginStart="3dp"
-                            app:setFanLevel="@{info.fanLevel}"
-                            tools:ignore="ContentDescription" />
 
                         <ImageView
                             android:layout_width="wrap_content"

@@ -69,31 +69,6 @@ fun ImageView.setDrawableImage(@DrawableRes drawable: Drawable) {
         .into(this)
 }
 
-@BindingAdapter("setFanLevel")
-fun setFanLevel(view: ImageView, level: Int?) {
-    level?.let {
-        val src =
-            when (it) {
-                1 -> R.drawable.ico_class_b
-                2 -> R.drawable.ico_class_s
-                3 -> R.drawable.ico_class_g
-                4 -> R.drawable.ico_class_d
-                5 -> R.drawable.ico_class_v
-                else -> null
-            }
-        view.isVisible = src != null
-
-        if (src != null) {
-            Glide
-                .with(view.context)
-                .load(src)
-                .into(view)
-        }
-    } ?: run {
-        view.isVisible = false
-    }
-}
-
 @BindingAdapter("formatStartTime")
 fun formatStartTime(view: TextView, startTime: String?) {
     if (startTime.isNullOrEmpty()) {
